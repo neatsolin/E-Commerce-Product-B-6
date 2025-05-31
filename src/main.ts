@@ -56,45 +56,40 @@ console.log("Products:", main.getProducts());
 console.log("Categories:", main.getProductCategories());
 console.log("Reviews:", main.getReviews());
 console.log("Payments:", main.getPayments());
-import { Admin, Customer, Seller, User } from "./Auth/User";
-import { registerUser } from "./Auth/Register";
-import { loginUser } from "./Auth/Login";
-import { logoutUser } from "./Auth/Logout";
 
-// Test All Roles 
-console.log("=== User Test ===");
-const user = new User("UserOne", "user@example.com", "userpass", "Street A");
-user.register("user@example.com", "userpass");
-user.login("user@example.com", "wrongpass");
-user.login("user@example.com", "userpass"); 
- 
-user.logout();
+// test.ts
 
-//  Customer 
-console.log("\n=== Customer Test ===");
-const customer = new Customer("CustomerOne", "cust@example.com", "custpass", "Street B", "098888888");
-customer.register("cust@example.com", "custpass");
-customer.login("wrong@example.com", "custpass"); 
+// === Function to Generate IDs ===
+function generateId(): string {
+    const timestamp = Date.now().toString(36);
+    const randomStr = Math.random().toString(36).substring(2, 10);
+    return `${timestamp}-${randomStr}`;
+}
 
+import { User } from "./Auth/User";
 
-customer.login("cust@example.com", "custpass");  
-customer.logout();
+console.log("=== User Test: solin ===");
+const user1 = new User("solin", "solin@solin.com", "userpass", "Street A");
+user1.register("solin@solin.com", "userpass");
+user1.login("solin@solin.com", "wrongpass");
+user1.logout();
 
-// Seller
-console.log("\n=== Seller Test ===");
-const seller = new Seller("SellerOne", "sell@example.com", "sellpass", "Street C", true);
-seller.register("sell@example.com", "sellpass");
-seller.login("", "");                          
-seller.login("sell@example.com", "sellpass");   
-seller.logout();
+console.log("\n=== User Test: ya ===");
+const user2 = new User("ya", "ya@ya.com", "yapass", "Street Y");
+user2.register("ya@ya.com", "yapass");
+user2.login("ya@ya.com", "yapass");
+user2.logout();
 
-// Admin Authentication
-console.log("\n=== Admin Authentication Tests ===");
-const admin = new Admin("AdminUser", "admin@example.com", "pass123", "101 Blvd");
-console.log("Admin Register:", admin.register("admin.new@example.com", "newpass123") ? "successful" : "failed");
-console.log("Admin Login:", admin.login("admin.new@example.com", "newpass123") ? "successful" : "try again");
-console.log("Admin Authenticated:", admin.isAuthenticated() ? "successful" : "not authenticated");
-admin.logout();
-console.log("Admin Logout: successful");
-console.log("Admin Authenticated after logout:", admin.isAuthenticated() ? "successful" : "not authenticated");
+console.log("\n=== User Test: khouerm ===");
+const user3 = new User("khouerm", "khouerm@khouerm.com", "khoupass", "Street K");
+user3.register("khouerm@khouerm.com", "khoupass");
+user3.login("khouerm@khouerm.com", "wrong");
+user3.login("khouerm@khouerm.com", "khoupass");
+user3.logout();
 
+console.log("\n=== User Test: kartrork ===");
+const user4 = new User("kartrork", "kartrork@kartrork.com", "kartpass", "Street Z");
+user4.register("kartrork@kartrork.com", "kartpass");
+user4.login("wrong@kartrork.com", "kartpass");
+user4.login("kartrork@kartrork.com", "kartpass");
+user4.logout();
