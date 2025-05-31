@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "ES6",
     "module": "commonjs",
-    "outDir": "dist",
-    "strictNullChecks": true
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/Auth/User.ts"],
+  "exclude": ["node_modules"]
 }
