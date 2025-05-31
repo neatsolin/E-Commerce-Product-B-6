@@ -3,7 +3,7 @@ export class Customer extends User {
     private customerID: string;
 
     constructor(userID: string, email: string, password: string, address: string, phoneNumber: string, customerID: string) {
-        super(userID, email, password, address, phoneNumber);
+        super(userID, email, password, address, );
         this.customerID = customerID;
     }
 
