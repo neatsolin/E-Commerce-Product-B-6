@@ -1,8 +1,5 @@
 import { User } from "./User";
 
-export function registerUser(user: User, email: string, password: string): void {
-    const result = user.register(email, password);
-    if (!result) {
-        console.log("Registration failed. Try again.");
-    }
+export function registerUser(user: User, email: string, password: string): boolean {
+    return user.register(email, password);
 }
