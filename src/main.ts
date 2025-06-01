@@ -62,7 +62,6 @@ console.log("Categories:", main.getProductCategories());
 console.log("Reviews:", main.getReviews());
 console.log("Payments:", main.getPayments());
 
-// test.ts
 
 // === Function to Generate IDs ===
 function generateId(): string {
@@ -98,3 +97,6 @@ user4.register("kartrork@kartrork.com", "kartpass");
 user4.login("wrong@kartrork.com", "kartpass");
 user4.login("kartrork@kartrork.com", "kartpass");
 user4.logout();
+
+
+
