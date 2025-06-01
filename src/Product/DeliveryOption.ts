@@ -1,13 +1,10 @@
-class DeliveryOption {
-  id: number;
-  name: string;
-  price: number;
+export class DeliveryOption {
+  method: string;
+  cost: number;
 
-  constructor(id: number, name: string, price: number) {
-    this.id = id;
-    this.name = name;
-    this.price = price;
+  constructor(method: string, cost: number) {
+    if (cost < 0) throw new Error('Delivery cost cannot be negative');
+    this.method = method;
+    this.cost = cost;
   }
 }
-
-export { DeliveryOption };
