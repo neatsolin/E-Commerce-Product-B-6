@@ -1,5 +1,7 @@
-import { User } from "./User";
+import { User } from "../Customer/User";
 
-export function logoutUser(user: User): void {
-    user.logout();
+export class Logout {
+  logout(user: User): boolean {
+    return true; // Simplified logout logic
+  }
 }

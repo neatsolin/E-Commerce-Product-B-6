@@ -1,11 +1,11 @@
 import { Address } from './Address';
 import { Order } from '../Order/Order';
 import { Review } from '../Product/Review';
-import { Cart } from '../Cart/Cart';
 import { Product } from '../Product/Product';
 import { Refund } from '../Order/Refund';
 import { Notification } from '../Common/Notification';
 import { calculateTotal } from '../Common/utils';
+import { Cart } from '../Cart/Cart';
 
 export class Customer {
   phoneNumber: string;
