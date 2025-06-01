@@ -1,11 +1,13 @@
-class ProductCategory {
-  id: number;
-  name: string;
+import { Product } from './Product';
 
-  constructor(id: number, name: string) {
-    this.id = id;
-    this.name = name;
+export class Category {
+  categoryName: string;
+
+  constructor(categoryName: string) {
+    this.categoryName = categoryName;
+  }
+
+  getProductsInCategory(products: Product[]): Product[] {
+    return products.filter(product => product.category === this);
   }
 }
-
-export { ProductCategory };
