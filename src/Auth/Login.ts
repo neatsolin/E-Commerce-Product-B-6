@@ -1,5 +1,21 @@
-import { User } from "./User";
+import { User } from '../Customer/User';
 
-export function loginUser(user: User, email: string, password: string): boolean {
-    return user.login(email, password);
+export class Login {
+  users: User[];
+
+  constructor() {
+    this.users = [];
+  }
+
+  authenticate(phoneNumber: string, password: string): User | null {
+    const user = this.users.find(u => u.customer?.phoneNumber === phoneNumber || u.role === 'seller');
+    if (user && password === 'pass') { // Simplified password check
+      return user;
+    }
+    return null;
+  }
+
+  addUser(user: User): void {
+    this.users.push(user);
+  }
 }

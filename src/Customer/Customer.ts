@@ -5,6 +5,7 @@ import { Product } from '../Product/Product';
 import { Refund } from '../Order/Refund';
 import { Notification } from '../Common/Notification';
 import { calculateTotal } from '../Common/utils';
+import { Cart } from '../Cart/Cart';
 
 export class Customer {
   phoneNumber: string;
