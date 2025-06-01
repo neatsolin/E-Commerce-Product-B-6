@@ -1,3 +1,4 @@
+// Import P
 import { DeliveryOption } from "./Product/DeliveryOption";
 import { Product } from "./Product/Product";
 import { ProductCategory } from "./Product/ProductCategory";
@@ -14,14 +15,18 @@ class Main {
   private productCategories: ProductCategory[] = [
     new ProductCategory(1, "Clothing"),
     new ProductCategory(2, "Electronics"),
-    new ProductCategory(3, "Accessories"),
+    new ProductCategory(4, "Home & Kitchen"),
+    new ProductCategory(5, "Books"),
+    new ProductCategory(6, "Sports"),
+    new ProductCategory(7, "Beauty"),
   ];
 
   private products: Product[] = [
     new Product(1, "T-Shirt", "Clothing", 19.99, 50, 1, 2.0),
     new Product(2, "Laptop Stand", "Electronics", 29.99, 30, 2),
-    new Product(3, "USB Cable", "Accessories", 9.99, 100, 1),
-  ];
+    new Product(3, "Coffee Maker", "Home & Kitchen", 49.99, 20, 4, 5.0),
+    new Product(4, "Novel", "Books", 14.99, 100, 5),
+    new Product(5, "Yoga Mat", "Sports", 24.99, 40, 6, 3.0),];
 
   private reviews: Review[] = [
     new Review(1, 1, 1, 4, "Great t-shirt, fits well!"),
@@ -79,11 +84,11 @@ user2.register("ya@ya.com", "yapass");
 user2.login("ya@ya.com", "yapass");
 user2.logout();
 
-console.log("\n=== User Test: khouerm ===");
-const user3 = new User("khouerm", "khouerm@khouerm.com", "khoupass", "Street K");
-user3.register("khouerm@khouerm.com", "khoupass");
-user3.login("khouerm@khouerm.com", "wrong");
-user3.login("khouerm@khouerm.com", "khoupass");
+console.log("\n=== User Test: khoeum ===");
+const user3 = new User("khoeum", "khoeum@khoeum.com", "khoupass", "Street K");
+user3.register("khoeum@khoeum.com", "khoupass");
+user3.login("khoeum@khoeum.com", "wrong");
+user3.login("khoeum@khoeum.com", "khoupass");
 user3.logout();
 
 console.log("\n=== User Test: kartrork ===");
