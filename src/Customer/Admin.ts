@@ -1,13 +1,17 @@
-import { User } from "../Auth/User";
-export  class Admin extends User {
-    private adminID: string;
+import { Seller } from './Seller';
 
-    constructor(userID: string, email: string, password: string, address: string, adminID: string) {
-        super(userID, email, password, address);
-        this.adminID = adminID;
-    }
+export class Admin {
+  sellers: Seller[];
 
-    getAdminID(): string {
-        return this.adminID;
-    }
+  constructor() {
+    this.sellers = [];
+  }
+
+  addSeller(seller: Seller): void {
+    this.sellers.push(seller);
+  }
+
+  getTotalStock(): { [productName: string]: number }[] {
+    return this.sellers.map(seller => seller.getProductStock());
+  }
 }

@@ -1,5 +1,5 @@
-import { User } from "./User";
+import { User } from "../Customer/User";
 
-export function loginUser(user: User, email: string, password: string): boolean {
-    return user.login(email, password);
+export function logoutUser(user: User): void {
+    user.logout();
 }

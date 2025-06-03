@@ -1,4 +1,4 @@
-class Product {
+export class Product {
   id: number;
   name: string;
   category: string;
@@ -7,7 +7,15 @@ class Product {
   discount?: number;
   sellerId: number;
 
-  constructor(id: number, name: string, category: string, price: number, stockQuantity: number, sellerId: number, discount?: number) {
+  constructor(
+    id: number,
+    name: string,
+    category: string,
+    price: number,
+    stockQuantity: number,
+    sellerId: number,
+    discount?: number
+  ) {
     this.id = id;
     this.name = name;
     this.category = category;
@@ -18,4 +26,4 @@ class Product {
   }
 }
 
-export { Product };
+

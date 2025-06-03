@@ -1,4 +1,4 @@
-class ProductCategory {
+export class ProductCategory {
   id: number;
   name: string;
 
@@ -8,4 +8,4 @@ class ProductCategory {
   }
 }
 
-export { ProductCategory };
+
