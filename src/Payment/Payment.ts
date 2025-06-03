@@ -1,33 +1,29 @@
-import { Order } from '../Order/Order';
-import { PaymentGateway } from './PaymentGateway';
-import { Notification } from '../Common/Notification';
-import { Invoice } from '../Order/Invoice';
-
-
-export class Payment {
-  order: Order;
+class Payment {
+  id: number;
+  orderId: number;
   amount: number;
   method: string;
   status: string;
-  gateway: PaymentGateway;
+  createdAt: Date;
+  totalPrice: number;
 
-  constructor(order: Order, amount: number, method: string) {
-    this.order = order;
+  constructor(id: number, orderId: number, amount: number, method: string, totalPrice?: number) {
+    this.id = id;
+    this.orderId = orderId;
     this.amount = amount;
     this.method = method;
-    this.status = 'pending';
-    this.gateway = new PaymentGateway();
+    this.status = "pending";
+    this.createdAt = new Date();
+    this.totalPrice = totalPrice ?? amount;
   }
 
-  processPayment(): boolean {
-    const success = this.gateway.process(this.order, this.amount, this.method);
-    this.status = success ? 'completed' : 'failed';
-    if (success) {
-      this.order.invoice = new Invoice(this.order, this.amount);
-      new Notification(`Payment of ${this.amount} for order ${this.order.orderNumber} successful`, this.order.customer.phoneNumber).send();
-    } else {
-      new Notification(`Payment failed for order ${this.order.orderNumber}`, this.order.customer.phoneNumber).send();
-    }
-    return success;
+  processPayment(): void {
+    this.status = "completed";
+  }
+
+  refund(): void {
+    this.status = "refunded";
   }
 }
+
+export { Payment };
