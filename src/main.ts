@@ -77,16 +77,14 @@ class Main {
 
       // Ensure only one payment per order
       if (orderData.payments.length === 0) {
-        const payment = new Payment(
-          parseInt(generateId().split('-')[0], 36),
-          orderId,
-          amount,
-          method,
-          orderData.createdAt,
-          totalPrice
-        );
-        orderData.payments.push(payment);
-        this.payments.push(payment);
+       const payment = new Payment(
+  parseInt(generateId().split('-')[0], 36),
+  orderId,
+  amount,
+  method,
+  totalPrice
+);
+payment.createdAt = orderData.createdAt;
       }
     }
   }
