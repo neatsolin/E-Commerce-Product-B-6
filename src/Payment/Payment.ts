@@ -1,4 +1,4 @@
-class Payment {
+export class Payment {
   id: number;
   orderId: number;
   amount: number;
@@ -7,7 +7,13 @@ class Payment {
   createdAt: Date;
   totalPrice: number;
 
-  constructor(id: number, orderId: number, amount: number, method: string, totalPrice?: number) {
+  constructor(
+    id: number,
+    orderId: number,
+    amount: number,
+    method: string,
+    totalPrice?: number
+  ) {
     this.id = id;
     this.orderId = orderId;
     this.amount = amount;
@@ -26,4 +32,3 @@ class Payment {
   }
 }
 
-export { Payment };
