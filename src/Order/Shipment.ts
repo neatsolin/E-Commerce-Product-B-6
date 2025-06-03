@@ -1,23 +1,32 @@
-import { Order } from './Order';
-import { DeliveryOption } from '../Product/DeliveryOption';
-
+import { OrderItem } from "../Order/OrderItem";
+import { DeliveryOption } from "../Product/DeliveryOption";
+import { Address } from "../Customer/Address";
 export class Shipment {
-  order: Order;
-  trackingNumber: string;
-  deliveryOption: DeliveryOption;
+  private shipmentId: string;
+  private orderItems: OrderItem[];
+  private trackingName: string;
+  private destination: Address;
+  private deliveryOption: DeliveryOption;
 
-  constructor(order: Order, trackingNumber: string, deliveryOption: DeliveryOption) {
-    if (!deliveryOption) throw new Error('Delivery option required for shipment');
-    this.order = order;
-    this.trackingNumber = trackingNumber;
+  constructor(
+    shipmentId: string,
+    orderItems: OrderItem[],
+    trackingName: string,
+    destination: Address,
+    deliveryOption: DeliveryOption
+  ) {
+    this.shipmentId = shipmentId;
+    this.orderItems = orderItems;
+    this.trackingName = trackingName;
+    this.destination = destination;
     this.deliveryOption = deliveryOption;
   }
 
-  // User Story 3: Delivery manager checks delivery method and destination
-  getDeliveryDetails(): { method: string, destination: string } {
-    return {
-      method: this.deliveryOption.method,
-      destination: this.order.customer.address.toString()
-    };
+  public getDeliveryMethod(): string {
+    return "";
+  }
+
+  public getDestination(): Address {
+    return this.destination;
   }
 }

@@ -1,17 +1,23 @@
-
-import { Order } from './Order';
-import { OrderItem } from './OrderItem';
+import { Order } from "../Order/Order";
+import { Customer } from "../Customer/Customer";
 
 export class Invoice {
-  order: Order;
-  totalPrice: number;
-  orderItems: OrderItem[];
-  invoiceNumber: string;
+  private invoiceId: string;
+  private order: Order;
+  private customer: Customer;
+  private totalAmount: number;
 
-  constructor(order: Order, totalPrice: number) {
+  constructor(
+    invoiceId: string,
+    order: Order,
+    customer: Customer,
+    totalAmount: number
+  ) {
+    this.invoiceId = invoiceId;
     this.order = order;
-    this.totalPrice = totalPrice;
-    this.orderItems = [...order.orderItems];
-    this.invoiceNumber = `INV-${Date.now()}`;
+    this.customer = customer;
+    this.totalAmount = totalAmount;
   }
+
+  public generateInvoice(): void {}
 }

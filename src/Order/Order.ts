@@ -1,41 +1,51 @@
-import { Customer } from '../Customer/Customer';
-import { OrderItem } from './OrderItem';
-import { DeliveryOption } from '../Product/DeliveryOption';
-import { Shipment } from './Shipment';
-import { Invoice } from './Invoice';
-import { Notification } from '../Common/Notification';
+import { Invoice } from "./Invoice";
+import { OrderItem } from "./OrderItem";
+import { Payment } from "../Payment/Payment";
+import { Shipment } from "./Shipment";
+import { Customer } from "../Customer/Customer";
 
 export class Order {
-  orderItems: OrderItem[];
-  customer: Customer;
-  deliveryOption: DeliveryOption | null;
-  shipments: Shipment[];
-  invoice: Invoice | null;
-  orderNumber: string;
+  private orderId: string;
+  private customer: Customer;
+  private orderItems: OrderItem[];
+  private totalPrice: number;
+  private deliveryFees: number;
+  private status: string;
+  private payment: Payment;
+  private shipments: Shipment[];
+  private invoice: Invoice;
 
-  constructor(customer: Customer, deliveryOption?: DeliveryOption) {
-    this.orderItems = [];
+  constructor(
+    orderId: string,
+    customer: Customer,
+    orderItems: OrderItem[],
+    totalPrice: number,
+    deliveryFees: number,
+    status: string,
+    payment: Payment,
+    shipments: Shipment[],
+    invoice: Invoice
+  ) {
+    this.orderId = orderId;
     this.customer = customer;
-    this.deliveryOption = deliveryOption || null;
-    this.shipments = [];
-    this.invoice = null;
-    this.orderNumber = `ORD-${Date.now()}`;
+    this.orderItems = orderItems;
+    this.totalPrice = totalPrice;
+    this.deliveryFees = deliveryFees;
+    this.status = status;
+    this.payment = payment;
+    this.shipments = shipments;
+    this.invoice = invoice;
   }
 
-  createShipments(): void {
-    // Group items by seller and create separate shipments
-    const itemsBySeller: { [sellerId: string]: OrderItem[] } = {};
-    this.orderItems.forEach(item => {
-      const sellerId = item.product.seller.toString();
-      if (!itemsBySeller[sellerId]) itemsBySeller[sellerId] = [];
-      itemsBySeller[sellerId].push(item);
-    });
-
-    Object.keys(itemsBySeller).forEach((sellerId, index) => {
-      const shipment = new Shipment(this, `TRACK-${this.orderNumber}-${index + 1}`, this.deliveryOption!);
-      this.shipments.push(shipment);
-    });
-
-    new Notification(`Order ${this.orderNumber} split into ${this.shipments.length} shipments`, this.customer.phoneNumber).send();
+  public calculateTotalPrice(): number {
+    return 0;
   }
+
+  public getOrderTotal(): number {
+    return 0;
+  }
+
+  public splitInShipments(): void {}
+
+  public cancelItem(orderItem: OrderItem): void {}
 }
