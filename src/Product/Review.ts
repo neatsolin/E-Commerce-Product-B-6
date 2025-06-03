@@ -1,16 +1,17 @@
-import { Customer } from '../Customer/Customer';
-import { Product } from './Product';
-
-export class Review {
-  customer: Customer;
-  product: Product;
+class Review {
+  id: number;
+  productId: number;
+  userId: number;
   rating: number;
-  comment: string;
+  comment?: string;
 
-  constructor(customer: Customer, product: Product, rating: number, comment: string) {
-    this.customer = customer;
-    this.product = product;
+  constructor(id: number, productId: number, userId: number, rating: number, comment?: string) {
+    this.id = id;
+    this.productId = productId;
+    this.userId = userId;
     this.rating = rating;
     this.comment = comment;
   }
 }
+
+export { Review };

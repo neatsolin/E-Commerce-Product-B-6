@@ -1,26 +1,21 @@
-import { Category } from './ProductCategory';
-import { Seller } from '../Customer/Seller';
-import { Review } from './Review';
-
-export class Product {
-  productName: string;
-  category: Category;
+class Product {
+  id: number;
+  name: string;
+  category: string;
   price: number;
   stockQuantity: number;
-  discount: number | null;
-  seller: Seller;
-  reviews: Review[];
+  discount?: number;
+  sellerId: number;
 
-  constructor(productName: string, category: Category, price: number, stockQuantity: number, seller: Seller, discount?: number) {
-    if (price <= 0) throw new Error('Price must be positive');
-    if (stockQuantity < 0) throw new Error('Stock quantity cannot be negative');
-    this.productName = productName;
+  constructor(id: number, name: string, category: string, price: number, stockQuantity: number, sellerId: number, discount?: number) {
+    this.id = id;
+    this.name = name;
     this.category = category;
     this.price = price;
     this.stockQuantity = stockQuantity;
-    this.discount = discount || null;
-    this.seller = seller;
-    this.reviews = [];
-    this.seller.addProduct(this);
+    this.discount = discount;
+    this.sellerId = sellerId;
   }
 }
+
+export { Product };
