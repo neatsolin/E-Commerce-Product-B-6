@@ -1,4 +1,4 @@
-class DeliveryOption {
+export class DeliveryOption {
   id: number;
   name: string;
   price: number;
@@ -10,4 +10,4 @@ class DeliveryOption {
   }
 }
 
-export { DeliveryOption };
+
