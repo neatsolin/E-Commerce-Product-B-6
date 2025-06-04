@@ -1,31 +1,24 @@
-import { Order } from '../Order/Order';
-import { Product } from '../Product/Product';
-import { Notification } from '../Common/Notification';
 
-export class Seller {
-  productStock: { [productName: string]: number };
+import { Order } from "../Order/Order"; // Adjust path as needed
+import { User } from "./User";
 
-  constructor() {
-    this.productStock = {};
+export class Seller extends User {
+  private isPlatformSeller: boolean;
+
+  constructor(
+    username: string,
+    email: string,
+    password: string,
+    address: string,
+    isPlatformSeller: boolean
+  ) {
+    super(username, email, password, address);
+    this.isPlatformSeller = isPlatformSeller;
   }
-
-  // User Story 4: System admin wants to know how many products are in stock for each seller
-  getProductStock(): { [productName: string]: number } {
-    return { ...this.productStock };
+  public getProductStock(): { [productName: string]: number } {
+    // This method should return the stock of products for this seller.
+    // For now, we return an empty object as a placeholder.
+    return {};
   }
-
-  // User Story 2: Seller wants to view all orders that include their products
-  getOrdersBySeller(orders: Order[]): Order[] {
-    const sellerOrders = orders.filter(order => 
-      order.orderItems.some(item => item.product.seller === this)
-    );
-    if (sellerOrders.length > 0) {
-      new Notification(`You have ${sellerOrders.length} orders to fulfill`, 'seller@example.com').send();
-    }
-    return sellerOrders;
-  }
-
-  addProduct(product: Product): void {
-    this.productStock[product.productName] = product.stockQuantity;
-  }
+  
 }
