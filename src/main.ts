@@ -39,9 +39,9 @@ class Main {
   ];
 
   private products: Product[] = [
-    new Product(1, "T-Shirt", "Clothing", 10.00, 50, 1),
-    new Product(2, "Laptop Stand", "Electronics", 500.00, 30, 2),
-    new Product(3, "USB Cable", "Accessories", 50.00, 100, 1),
+    new Product(1, "T-Shirt", "Clothing", 10.0, 50, 1),
+    new Product(2, "Laptop Stand", "Electronics", 500.0, 30, 2),
+    new Product(3, "USB Cable", "Accessories", 50.0, 100, 1),
   ];
 
   private reviews: Review[] = [
@@ -49,25 +49,39 @@ class Main {
   ];
 
   private payments: Payment[] = [];
-  private userPayments: Map<string, { orderId: number; payments: Payment[]; createdAt: Date }[]> = new Map();
+  private userPayments: Map<
+    string,
+    { orderId: number; payments: Payment[]; createdAt: Date }[]
+  > = new Map();
   private currentUser: User | null = null;
 
   setLoggedInUser(user: User): void {
     if (user.isAuthenticated()) {
       this.currentUser = user;
-      console.log(`${COLORS.GREEN}✅ Welcome, ${user.getUsername()}!${COLORS.RESET}`);
+      console.log(
+        `${COLORS.GREEN}✅ Welcome, ${user.getUsername()}!${COLORS.RESET}`
+      );
       if (!this.userPayments.has(user.getUsername())) {
         this.userPayments.set(user.getUsername(), []);
       }
     } else {
-      console.log(`${COLORS.RED}❌ Login failed. Cannot set user.${COLORS.RESET}`);
+      console.log(
+        `${COLORS.RED}❌ Login failed. Cannot set user.${COLORS.RESET}`
+      );
     }
   }
 
-  addPayment(orderId: number, amount: number, method: string, totalPrice: number | undefined, createdAt: Date): void {
+  addPayment(
+    orderId: number,
+    amount: number,
+    method: string,
+    totalPrice: number | undefined,
+    createdAt: Date
+  ): void {
     if (this.currentUser) {
-      let userPaymentData = this.userPayments.get(this.currentUser.getUsername()) || [];
-      let orderData = userPaymentData.find(data => data.orderId === orderId);
+      let userPaymentData =
+        this.userPayments.get(this.currentUser.getUsername()) || [];
+      let orderData = userPaymentData.find((data) => data.orderId === orderId);
 
       if (!orderData) {
         orderData = { orderId, payments: [], createdAt: createdAt };
@@ -77,21 +91,23 @@ class Main {
 
       // Ensure only one payment per order
       if (orderData.payments.length === 0) {
-       const payment = new Payment(
-  parseInt(generateId().split('-')[0], 36),
-  orderId,
-  amount,
-  method,
-  totalPrice
-);
-payment.createdAt = orderData.createdAt;
+        const payment = new Payment(
+          parseInt(generateId().split("-")[0], 36),
+          orderId,
+          amount,
+          method,
+          totalPrice
+        );
+        payment.createdAt = orderData.createdAt;
       }
     }
   }
 
   viewProducts(): void {
     if (!this.currentUser || !this.currentUser.isAuthenticated()) {
-      console.log(`${COLORS.RED}⚠️  Please log in to view products.${COLORS.RESET}`);
+      console.log(
+        `${COLORS.RED}⚠️  Please log in to view products.${COLORS.RESET}`
+      );
       return;
     }
 
@@ -110,18 +126,34 @@ payment.createdAt = orderData.createdAt;
       console.log(`${COLORS.GREEN}  Product {${COLORS.RESET}`);
       console.log(`    id: ${COLORS.GREEN}${product.id}${COLORS.RESET},`);
       console.log(`    name: ${COLORS.GREEN}'${product.name}'${COLORS.RESET},`);
-      console.log(`    category: ${COLORS.GREEN}'${product.category}'${COLORS.RESET},`);
+      console.log(
+        `    category: ${COLORS.GREEN}'${product.category}'${COLORS.RESET},`
+      );
       console.log(`    price: ${COLORS.GREEN}${product.price}${COLORS.RESET},`);
-      console.log(`    stockQuantity: ${COLORS.GREEN}${product.stockQuantity}${COLORS.RESET},`);
-      console.log(`    discount: ${COLORS.GREEN}${product.discount ?? 'undefined'}${COLORS.RESET},`);
-      console.log(`    sellerId: ${COLORS.GREEN}${product.sellerId}${COLORS.RESET},`);
+      console.log(
+        `    stockQuantity: ${COLORS.GREEN}${product.stockQuantity}${COLORS.RESET},`
+      );
+      console.log(
+        `    discount: ${COLORS.GREEN}${product.discount ?? "undefined"}${
+          COLORS.RESET
+        },`
+      );
+      console.log(
+        `    sellerId: ${COLORS.GREEN}${product.sellerId}${COLORS.RESET},`
+      );
       console.log(`  }${index < this.products.length - 1 ? "," : ""}`);
     });
     console.log("]");
 
     console.log(`${COLORS.CYAN}\nCategories: [${COLORS.RESET}`);
     this.productCategories.forEach((category, index) => {
-      console.log(`  ProductCategory { id: ${COLORS.GREEN}${category.id}${COLORS.RESET}, name: ${COLORS.GREEN}'${category.name}'${COLORS.RESET} }${index < this.productCategories.length - 1 ? "," : ""}`);
+      console.log(
+        `  ProductCategory { id: ${COLORS.GREEN}${category.id}${
+          COLORS.RESET
+        }, name: ${COLORS.GREEN}'${category.name}'${COLORS.RESET} }${
+          index < this.productCategories.length - 1 ? "," : ""
+        }`
+      );
     });
     console.log("]");
 
@@ -129,42 +161,65 @@ payment.createdAt = orderData.createdAt;
     this.reviews.forEach((review, index) => {
       console.log(`${COLORS.GREEN}  Review {${COLORS.RESET}`);
       console.log(`    id: ${COLORS.GREEN}${review.id}${COLORS.RESET},`);
-      console.log(`    productId: ${COLORS.GREEN}${review.productId}${COLORS.RESET},`);
-      console.log(`    userId: ${COLORS.GREEN}${review.userId}${COLORS.RESET},`);
-      console.log(`    rating: ${COLORS.GREEN}${review.rating}${COLORS.RESET},`);
-      console.log(`    comment: ${COLORS.GREEN}'${review.comment}'${COLORS.RESET},`);
+      console.log(
+        `    productId: ${COLORS.GREEN}${review.productId}${COLORS.RESET},`
+      );
+      console.log(
+        `    userId: ${COLORS.GREEN}${review.userId}${COLORS.RESET},`
+      );
+      console.log(
+        `    rating: ${COLORS.GREEN}${review.rating}${COLORS.RESET},`
+      );
+      console.log(
+        `    comment: ${COLORS.GREEN}'${review.comment}'${COLORS.RESET},`
+      );
       console.log(`  }${index < this.reviews.length - 1 ? "," : ""}`);
     });
     console.log("]");
 
-    const userPaymentData = this.userPayments.get(this.currentUser.getUsername()) || [];
-    userPaymentData.forEach(order => {
+    const userPaymentData =
+      this.userPayments.get(this.currentUser.getUsername()) || [];
+    userPaymentData.forEach((order) => {
       console.log(`${COLORS.CYAN}\nOrder ${order.orderId}: {${COLORS.RESET}`);
-      console.log(`  Date: ${COLORS.GREEN}'${order.createdAt.toLocaleString()}'${COLORS.RESET},`);
+      console.log(
+        `  Date: ${COLORS.GREEN}'${order.createdAt.toLocaleString()}'${
+          COLORS.RESET
+        },`
+      );
       console.log(`  Payments: [`);
       if (order.payments.length === 0) {
         console.log("    No payments yet.");
       } else {
-        const totalAmountSpent = order.payments.reduce((sum, payment) => sum + payment.totalPrice, 0);
+        const totalAmountSpent = order.payments.reduce(
+          (sum, payment) => sum + payment.totalPrice,
+          0
+        );
         const totalProducts = this.products.length;
         const totalCategories = this.productCategories.length;
-        const totalProductsCost = this.products.reduce((sum, product) => sum + product.price, 0);
+        const totalProductsCost = this.products.reduce(
+          (sum, product) => sum + product.price,
+          0
+        );
 
-        order.payments.forEach(payment => {
+        order.payments.forEach((payment) => {
           console.log(
             `${COLORS.GREEN}    Payment {\n` +
-            `      id: ${COLORS.GREEN}${payment.id}${COLORS.RESET},\n` +
-            `      orderId: ${COLORS.GREEN}${payment.orderId}${COLORS.RESET},\n` +
-            `      amount: ${COLORS.GREEN}${payment.amount}${COLORS.RESET},\n` +
-            `      method: ${COLORS.GREEN}'${payment.method}'${COLORS.RESET},\n` +
-            `      status: ${COLORS.GREEN}'${payment.status}'${COLORS.RESET},\n` +
-            `      createdAt: ${COLORS.GREEN}${payment.createdAt.toISOString()}${COLORS.RESET},\n` +
-            `      totalPrice: ${COLORS.GREEN}${payment.totalPrice}${COLORS.RESET},\n` +
-            `      totalProductsBought: ${COLORS.GREEN}${totalProducts}${COLORS.RESET},\n` +
-            `      totalCategoriesBought: ${COLORS.GREEN}${totalCategories}${COLORS.RESET},\n` +
-            `      totalAmountSpent: ${COLORS.GREEN}${totalAmountSpent}${COLORS.RESET},\n` +
-            `      totalProductsCost: ${COLORS.GREEN}${totalProductsCost.toFixed(2)}${COLORS.RESET}\n` +
-            `    },`
+              `      id: ${COLORS.GREEN}${payment.id}${COLORS.RESET},\n` +
+              `      orderId: ${COLORS.GREEN}${payment.orderId}${COLORS.RESET},\n` +
+              `      amount: ${COLORS.GREEN}${payment.amount}${COLORS.RESET},\n` +
+              `      method: ${COLORS.GREEN}'${payment.method}'${COLORS.RESET},\n` +
+              `      status: ${COLORS.GREEN}'${payment.status}'${COLORS.RESET},\n` +
+              `      createdAt: ${
+                COLORS.GREEN
+              }${payment.createdAt.toISOString()}${COLORS.RESET},\n` +
+              `      totalPrice: ${COLORS.GREEN}${payment.totalPrice}${COLORS.RESET},\n` +
+              `      totalProductsBought: ${COLORS.GREEN}${totalProducts}${COLORS.RESET},\n` +
+              `      totalCategoriesBought: ${COLORS.GREEN}${totalCategories}${COLORS.RESET},\n` +
+              `      totalAmountSpent: ${COLORS.GREEN}${totalAmountSpent}${COLORS.RESET},\n` +
+              `      totalProductsCost: ${
+                COLORS.GREEN
+              }${totalProductsCost.toFixed(2)}${COLORS.RESET}\n` +
+              `    },`
           );
         });
       }
@@ -232,7 +287,12 @@ app.viewProducts();
 user3.logout();
 
 console.log(`${COLORS.CYAN}\n=== User Test: kartrork ===${COLORS.RESET}`);
-const user4 = new User("kartrork", "kartrork@kartrork.com", "kartpass", "Street Z");
+const user4 = new User(
+  "kartrork",
+  "kartrork@kartrork.com",
+  "kartpass",
+  "Street Z"
+);
 user4.register("kartrork@kartrork.com", "kartpass");
 user4.login("wrong@kartrork.com", "kartpass");
 user4.login("kartrork@kartrork.com", "kartpass");
