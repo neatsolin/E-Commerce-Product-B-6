@@ -13,13 +13,15 @@ export class Customer {
   orders: Order[];
   cart: Cart;
   reviews: Review[];
+  customerId: string;
 
-  constructor(phoneNumber: string, address: Address) {
+  constructor(phoneNumber: string, address: Address,customerId: string) {
     this.phoneNumber = phoneNumber;
     this.address = address;
     this.orders = [];
     this.cart = new Cart(this);
     this.reviews = [];
+    this.customerId = customerId
   }
 
   // User Story 1: View total order price including discounts and delivery fees
