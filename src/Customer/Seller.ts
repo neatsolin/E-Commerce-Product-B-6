@@ -15,6 +15,10 @@ export class Seller extends User {
     super(username, email, password, address);
     this.isPlatformSeller = isPlatformSeller;
   }
-
+  public getProductStock(): { [productName: string]: number } {
+    // This method should return the stock of products for this seller.
+    // For now, we return an empty object as a placeholder.
+    return {};
+  }
   
 }
