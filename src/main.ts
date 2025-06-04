@@ -139,7 +139,7 @@ class Main {
         },`
       );
       console.log(
-        `    sellerId: ${COLORS.GREEN}${product.sellerId}${COLORS.RESET},`
+        `    sellerId: ${COLORS.YELLOW}${product.sellerId}${COLORS.RESET},`
       );
       console.log(`  }${index < this.products.length - 1 ? "," : ""}`);
     });
@@ -148,7 +148,7 @@ class Main {
     console.log(`${COLORS.CYAN}\nCategories: [${COLORS.RESET}`);
     this.productCategories.forEach((category, index) => {
       console.log(
-        `  ProductCategory { id: ${COLORS.GREEN}${category.id}${
+        `  ProductCategory { id: ${COLORS.YELLOW}${category.id}${
           COLORS.RESET
         }, name: ${COLORS.GREEN}'${category.name}'${COLORS.RESET} }${
           index < this.productCategories.length - 1 ? "," : ""
@@ -160,12 +160,12 @@ class Main {
     console.log(`${COLORS.CYAN}\nReviews: [${COLORS.RESET}`);
     this.reviews.forEach((review, index) => {
       console.log(`${COLORS.GREEN}  Review {${COLORS.RESET}`);
-      console.log(`    id: ${COLORS.GREEN}${review.id}${COLORS.RESET},`);
+      console.log(`    id: ${COLORS.YELLOW}${review.id}${COLORS.RESET},`);
       console.log(
-        `    productId: ${COLORS.GREEN}${review.productId}${COLORS.RESET},`
+        `    productId: ${COLORS.YELLOW}${review.productId}${COLORS.RESET},`
       );
       console.log(
-        `    userId: ${COLORS.GREEN}${review.userId}${COLORS.RESET},`
+        `    userId: ${COLORS.YELLOW}${review.userId}${COLORS.RESET},`
       );
       console.log(
         `    rating: ${COLORS.GREEN}${review.rating}${COLORS.RESET},`
@@ -182,7 +182,7 @@ class Main {
     userPaymentData.forEach((order) => {
       console.log(`${COLORS.CYAN}\nOrder ${order.orderId}: {${COLORS.RESET}`);
       console.log(
-        `  Date: ${COLORS.GREEN}'${order.createdAt.toLocaleString()}'${
+        `  Date: ${COLORS.PURPLE}'${order.createdAt.toLocaleString()}'${
           COLORS.RESET
         },`
       );
@@ -204,13 +204,13 @@ class Main {
         order.payments.forEach((payment) => {
           console.log(
             `${COLORS.GREEN}    Payment {\n` +
-              `      id: ${COLORS.GREEN}${payment.id}${COLORS.RESET},\n` +
-              `      orderId: ${COLORS.GREEN}${payment.orderId}${COLORS.RESET},\n` +
+              `      id: ${COLORS.YELLOW}${payment.id}${COLORS.RESET},\n` +
+              `      orderId: ${COLORS.YELLOW}${payment.orderId}${COLORS.RESET},\n` +
               `      amount: ${COLORS.GREEN}${payment.amount}${COLORS.RESET},\n` +
               `      method: ${COLORS.GREEN}'${payment.method}'${COLORS.RESET},\n` +
               `      status: ${COLORS.GREEN}'${payment.status}'${COLORS.RESET},\n` +
               `      createdAt: ${
-                COLORS.GREEN
+                COLORS.PURPLE
               }${payment.createdAt.toISOString()}${COLORS.RESET},\n` +
               `      totalPrice: ${COLORS.GREEN}${payment.totalPrice}${COLORS.RESET},\n` +
               `      totalProductsBought: ${COLORS.GREEN}${totalProducts}${COLORS.RESET},\n` +
@@ -245,11 +245,11 @@ class Main {
 const app = new Main();
 
 console.log(`${COLORS.CYAN}\n=== User Test: solin ===${COLORS.RESET}`);
-const user1 = new User("solin", "solin@solin.com", "userpass", "Street A");
+const user1 = new User("Solin", "solin@solin.com", "userpass", "Street A");
 user1.register("solin@solin.com", "userpass");
 user1.login("solin@solin.com", "userpass");
 app.setLoggedInUser(user1);
-const solinOrderDate = new Date("2025-06-03T19:57:00+07:00");
+const solinOrderDate = new Date("2025-06-05T19:58:00+07:00");
 app.addPayment(1, 59.98, "Credit Card", 59.98, solinOrderDate);
 app.viewProducts();
 user1.logout();
