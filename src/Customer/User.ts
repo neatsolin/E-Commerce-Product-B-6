@@ -17,6 +17,7 @@ export interface Authenticable {
 export class User implements Authenticable {
   userId: string;
   private isLoggedIn: boolean;
+  
 
   constructor(
     private username: string,
