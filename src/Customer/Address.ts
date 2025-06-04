@@ -1,19 +1,52 @@
 export class Address {
-  streetAddress: string;
-  city: string;
-  country: string;
-  postalCode: string;
-  type: string;
+  constructor(
+    private addressId: string,
+    private street: string,
+    private city: string,
+    private country: string,
+    private postalCode: string
+  ) {}
 
-  constructor(streetAddress: string, city: string, country: string, postalCode: string, type: string) {
-    this.streetAddress = streetAddress;
-    this.city = city;
-    this.country = country;
-    this.postalCode = postalCode;
-    this.type = type;
+  // Getter methods
+  public getAddressId(): string {
+    return this.addressId;
   }
 
-  toString(): string {
-    return `${this.streetAddress}, ${this.city}, ${this.country}, ${this.postalCode}`;
+  public getStreet(): string {
+    return this.street;
+  }
+
+  public getCity(): string {
+    return this.city;
+  }
+
+  public getCountry(): string {
+    return this.country;
+  }
+
+  public getPostalCode(): string {
+    return this.postalCode;
+  }
+
+  // Setter methods
+  public setStreet(street: string): void {
+    this.street = street;
+  }
+
+  public setCity(city: string): void {
+    this.city = city;
+  }
+
+  public setCountry(country: string): void {
+    this.country = country;
+  }
+
+  public setPostalCode(postalCode: string): void {
+    this.postalCode = postalCode;
+  }
+
+  // Utility method to format full address
+  public getFullAddress(): string {
+    return `${this.street}, ${this.city}, ${this.country}, ${this.postalCode}`;
   }
 }

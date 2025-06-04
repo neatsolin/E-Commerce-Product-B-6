@@ -5,6 +5,8 @@ import { Review } from "./Product/Review";
 import { Payment } from "./Payment/Payment";
 import { User } from "./Auth/User";
 
+
+
 // === ANSI Color Codes ===
 const COLORS = {
   RESET: "\x1b[0m",
@@ -245,35 +247,4 @@ user4.logout();
 
 
 
-import { Customer } from "./Customer/Customer";
-import { Order } from "./Order/Order";
-
-import { Refund } from "./Order/Refund";
-
-// Create a dummy customer
-const customer = new Customer("c001", "John Doe", "john@example.com");
-
-// Create a dummy order
-const order = new Order("o001", customer, new Date(), []);
-
-// Create a dummy payment
-const payment = new Payment("p001", order, 100.0, new Date(), "Credit Card");
-
-// Request a refund
-const refund = new Refund(
-  "r001",
-  order,
-  "Product damaged",
-  payment,
-  100.0,
-  false,
-  new Date()
-);
-
-// Try to process the refund
-const success = refund.processRefund();
-
-// Notify result
-console.log(`Refund ${success ? "processed successfully" : "failed to process"}.`);
-refund.notifyCustomer();
 

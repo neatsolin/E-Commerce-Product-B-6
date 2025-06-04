@@ -1,7 +1,8 @@
 import { Customer } from '../Customer/Customer';
 import { CartItem } from './CartItem';
-import { Order } from '../Order/Order';
-import { OrderItem } from '../Order/OrderItem';
+
+
+
 
 export class Cart {
   customer: Customer;
@@ -13,7 +14,7 @@ export class Cart {
   }
 
   addItem(item: CartItem): void {
-    const existingItem = this.items.find(i => i.product.productName === item.product.productName);
+    const existingItem = this.items.find(i => i.product.name === item.product.name);
     if (existingItem) {
       existingItem.quantity += item.quantity;
     } else {
@@ -22,19 +23,13 @@ export class Cart {
   }
 
   removeItem(productName: string): void {
-    this.items = this.items.filter(item => item.product.productName !== productName);
+    this.items = this.items.filter(item => item.product.name !== productName);
   }
 
-  checkout(): Order {
-    const order = new Order(this.customer);
-    this.items.forEach(item => {
-      order.orderItems.push(new OrderItem(item.product, item.quantity));
-      order.deliveryOption = item.deliveryOption;
-      item.product.stockQuantity -= item.quantity;
-      item.product.seller.productStock[item.product.productName] = item.product.stockQuantity;
-    });
-    this.items = [];
-    this.customer.orders.push(order);
-    return order;
+  updateItemQuantity(productName: string, quantity: number): void {
+    const item = this.items.find(i => i.product.name === productName);
+    if (item) {
+      item.quantity = quantity;
+    }
   }
 }
