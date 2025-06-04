@@ -139,7 +139,7 @@ class Main {
         },`
       );
       console.log(
-        `    sellerId: ${COLORS.YELLOW}${product.sellerId}${COLORS.RESET},`
+        `    sellerId: ${COLORS.GREEN}${product.sellerId}${COLORS.RESET},`
       );
       console.log(`  }${index < this.products.length - 1 ? "," : ""}`);
     });
@@ -148,7 +148,7 @@ class Main {
     console.log(`${COLORS.CYAN}\nCategories: [${COLORS.RESET}`);
     this.productCategories.forEach((category, index) => {
       console.log(
-        `  ProductCategory { id: ${COLORS.YELLOW}${category.id}${
+        `  ProductCategory { id: ${COLORS.GREEN}${category.id}${
           COLORS.RESET
         }, name: ${COLORS.GREEN}'${category.name}'${COLORS.RESET} }${
           index < this.productCategories.length - 1 ? "," : ""
@@ -160,12 +160,12 @@ class Main {
     console.log(`${COLORS.CYAN}\nReviews: [${COLORS.RESET}`);
     this.reviews.forEach((review, index) => {
       console.log(`${COLORS.GREEN}  Review {${COLORS.RESET}`);
-      console.log(`    id: ${COLORS.YELLOW}${review.id}${COLORS.RESET},`);
+      console.log(`    id: ${COLORS.GREEN}${review.id}${COLORS.RESET},`);
       console.log(
-        `    productId: ${COLORS.YELLOW}${review.productId}${COLORS.RESET},`
+        `    productId: ${COLORS.GREEN}${review.productId}${COLORS.RESET},`
       );
       console.log(
-        `    userId: ${COLORS.YELLOW}${review.userId}${COLORS.RESET},`
+        `    userId: ${COLORS.GREEN}${review.userId}${COLORS.RESET},`
       );
       console.log(
         `    rating: ${COLORS.GREEN}${review.rating}${COLORS.RESET},`
@@ -182,7 +182,7 @@ class Main {
     userPaymentData.forEach((order) => {
       console.log(`${COLORS.CYAN}\nOrder ${order.orderId}: {${COLORS.RESET}`);
       console.log(
-        `  Date: ${COLORS.PURPLE}'${order.createdAt.toLocaleString()}'${
+        `  Date: ${COLORS.GREEN}'${order.createdAt.toLocaleString()}'${
           COLORS.RESET
         },`
       );
@@ -204,13 +204,13 @@ class Main {
         order.payments.forEach((payment) => {
           console.log(
             `${COLORS.GREEN}    Payment {\n` +
-              `      id: ${COLORS.YELLOW}${payment.id}${COLORS.RESET},\n` +
-              `      orderId: ${COLORS.YELLOW}${payment.orderId}${COLORS.RESET},\n` +
+              `      id: ${COLORS.GREEN}${payment.id}${COLORS.RESET},\n` +
+              `      orderId: ${COLORS.GREEN}${payment.orderId}${COLORS.RESET},\n` +
               `      amount: ${COLORS.GREEN}${payment.amount}${COLORS.RESET},\n` +
               `      method: ${COLORS.GREEN}'${payment.method}'${COLORS.RESET},\n` +
               `      status: ${COLORS.GREEN}'${payment.status}'${COLORS.RESET},\n` +
               `      createdAt: ${
-                COLORS.PURPLE
+                COLORS.GREEN
               }${payment.createdAt.toISOString()}${COLORS.RESET},\n` +
               `      totalPrice: ${COLORS.GREEN}${payment.totalPrice}${COLORS.RESET},\n` +
               `      totalProductsBought: ${COLORS.GREEN}${totalProducts}${COLORS.RESET},\n` +
