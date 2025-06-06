@@ -1,34 +1,14 @@
 export class Payment {
-  id: number;
-  orderId: number;
-  amount: number;
-  method: string;
-  status: string;
-  createdAt: Date;
-  totalPrice: number;
-
   constructor(
-    id: number,
-    orderId: number,
-    amount: number,
-    method: string,
-    totalPrice?: number
+    public id: number,
+    public orderId: number,
+    public amount: number,
+    public method: string,
+    public totalPrice?: number
   ) {
-    this.id = id;
-    this.orderId = orderId;
-    this.amount = amount;
-    this.method = method;
-    this.status = "pending";
+    this.status = "Pending";
     this.createdAt = new Date();
-    this.totalPrice = totalPrice ?? amount;
   }
-
-  processPayment(): void {
-    this.status = "completed";
-  }
-
-  refund(): void {
-    this.status = "refunded";
-  }
+  public status: string;
+  public createdAt: Date;
 }
-
