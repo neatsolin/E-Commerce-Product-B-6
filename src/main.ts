@@ -1,5 +1,4 @@
 // Minimal implementations for dependent classes
-
 import { DeliveryOption } from "./Product/DeliveryOption";
 import { Product } from "./Product/Product";
 import { ProductCategory } from "./Product/ProductCategory";
@@ -180,30 +179,30 @@ class Main {
   }
 
   // User Story 4: View stock quantity for each seller
-  // viewStockBySeller(): void {
-  //   const stockBySeller = new Map<number, { productName: string; quantity: number }[]>();
-  //   this.products.forEach((product) => {
-  //     if (!stockBySeller.has(product.sellerId)) {
-  //       stockBySeller.set(product.sellerId, []);
-  //     }
-  //     stockBySeller.get(product.sellerId)!.push({
-  //       productName: product.name,
-  //       quantity: product.stockQuantity,
-  //     });
-  //   });
+  viewStockBySeller(): void {
+    const stockBySeller = new Map<number, { productName: string; quantity: number }[]>();
+    this.products.forEach((product) => {
+      if (!stockBySeller.has(product.sellerId)) {
+        stockBySeller.set(product.sellerId, []);
+      }
+      stockBySeller.get(product.sellerId)!.push({
+        productName: product.name,
+        quantity: product.stockQuantity,
+      });
+    });
 
-  //   console.log(`${COLORS.CYAN}\nStock by Seller: {${COLORS.RESET}`);
-  //   stockBySeller.forEach((products, sellerId) => {
-  //     console.log(`  Seller ${sellerId}: [`);
-  //     products.forEach((item, index) => {
-  //       console.log(
-  //         `    { productName: ${COLORS.GREEN}'${item.productName}'${COLORS.RESET}, quantity: ${COLORS.GREEN}${item.quantity}${COLORS.RESET} }${index < products.length - 1 ? "," : ""}`
-  //       );
-  //     });
-  //     console.log("  ],");
-  //   });
-  //   console.log(`}${COLORS.RESET}`);
-  // }
+    console.log(`${COLORS.CYAN}\nStock by Seller: {${COLORS.RESET}`);
+    stockBySeller.forEach((products, sellerId) => {
+      console.log(`  Seller ${sellerId}: [`);
+      products.forEach((item, index) => {
+        console.log(
+          `    { productName: ${COLORS.GREEN}'${item.productName}'${COLORS.RESET}, quantity: ${COLORS.GREEN}${item.quantity}${COLORS.RESET} }${index < products.length - 1 ? "," : ""}`
+        );
+      });
+      console.log("  ],");
+    });
+    console.log(`}${COLORS.RESET}`);
+  }
 
   // User Story 5: Cancel one item and get refund
   cancelOrderItem(orderId: number, productId: number): void {
@@ -573,9 +572,9 @@ app.setLoggedInUser(user1);
 const solinOrderDate = new Date("2025-06-05T19:58:00+07:00");
 app.addPayment(1, 60.00, "Credit Card", 60.00, solinOrderDate); // Matches T-Shirt + USB Cable
 app.viewProducts();
-app.viewOrderTotal("Solin"); 
-app.cancelOrderItem(1, 1); 
-app.addReview(1, 5, "Excellent product!");
+app.viewOrderTotal("Solin"); // User Story 1
+app.cancelOrderItem(1, 1); // User Story 5 with enhanced output including "canceled"
+app.addReview(1, 5, "Excellent product!"); // User Story 6 with enhanced output
 user1.logout();
 
 console.log(`${COLORS.CYAN}\n=== Seller Test: Seller 1 ===${COLORS.RESET}`);
@@ -585,5 +584,5 @@ app.addProduct(1, "Headphones", "Electronics", 99.99, 20, 5); // Add new product
 console.log(`${COLORS.CYAN}\n=== Delivery Manager Test ===${COLORS.RESET}`);
 app.viewShipmentDetails(1); // User Story 3
 
-// console.log(`${COLORS.CYAN}\n=== Admin Test ===${COLORS.RESET}`);
-// app.viewStockBySeller(); // User Story 4
+console.log(`${COLORS.CYAN}\n=== Admin Test ===${COLORS.RESET}`);
+app.viewStockBySeller(); // User Story 4
