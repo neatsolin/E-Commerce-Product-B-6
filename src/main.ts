@@ -39,12 +39,22 @@ class Main {
     new ProductCategory(1, "Clothing"),
     new ProductCategory(2, "Electronics"),
     new ProductCategory(3, "Accessories"),
+    new ProductCategory(4, "Home & Kitchen"),
+    new ProductCategory(5, "Sports"),
+    new ProductCategory(6, "Books"),
+    new ProductCategory(7, "Beauty"),
   ];
 
   private products: Product[] = [
     new Product(1, "T-Shirt", "Clothing", 10.0, 50, 1),
     new Product(2, "Laptop Stand", "Electronics", 500.0, 30, 2),
     new Product(3, "USB Cable", "Accessories", 50.0, 100, 1),
+    new Product(5, "Yoga Mat", "Sports", 25.0, 40, 5),
+    new Product(6, "Novel Book", "Books", 15.0, 60, 6),
+    new Product(7, "Lipstick", "Beauty", 20.0, 80, 7),
+    new Product(8, "Smartphone Case", "Accessories", 15.0, 70, 1),
+    new Product(9, "Wireless Headphones", "Electronics", 200.0, 25, 2),
+    new Product(10, "Blender", "Home & Kitchen", 100.0, 15, 4),
   ];
 
   private reviews: Review[] = [
@@ -247,7 +257,10 @@ class Main {
     if (this.currentUser && this.currentUser.isAuthenticated()) {
       const username = this.currentUser.getUsername();
       if (!this.carts.has(username)) {
-        this.carts.set(username, new Cart(`CART-${username}`, this.currentUser));
+        this.carts.set(
+          username,
+          new Cart(`CART-${username}`, this.currentUser)
+        );
         console.log(
           `${COLORS.GREEN}🛒 Cart initialized for ${username}!${COLORS.RESET}`
         );
@@ -259,7 +272,11 @@ class Main {
     }
   }
 
-  addToCart(productId: number, quantity: number, deliveryOptionId: number): void {
+  addToCart(
+    productId: number,
+    quantity: number,
+    deliveryOptionId: number
+  ): void {
     if (!this.currentUser || !this.currentUser.isAuthenticated()) {
       console.log(
         `${COLORS.RED}⚠️ Please log in to add items to cart.${COLORS.RESET}`
@@ -344,14 +361,14 @@ class Main {
         }'${COLORS.RESET},`
       );
       console.log(
-        `    itemTotal: ${COLORS.GREEN}$${totalItemPrice.toFixed(
-          2
-        )}${COLORS.RESET},`
+        `    itemTotal: ${COLORS.GREEN}$${totalItemPrice.toFixed(2)}${
+          COLORS.RESET
+        },`
       );
       console.log(
-        `    deliveryCost: ${COLORS.GREEN}$${deliveryCost.toFixed(
-          2
-        )}${COLORS.RESET},`
+        `    deliveryCost: ${COLORS.GREEN}$${deliveryCost.toFixed(2)}${
+          COLORS.RESET
+        },`
       );
       console.log(
         `    total: ${COLORS.GREEN}$${total.toFixed(2)}${COLORS.RESET},`
@@ -366,9 +383,9 @@ class Main {
       return total + itemTotal + deliveryCost;
     }, 0);
     console.log(
-      `${COLORS.MAGENTA}Total Cart Cost: $${totalCartCost.toFixed(
-        2
-      )}${COLORS.RESET}`
+      `${COLORS.MAGENTA}Total Cart Cost: $${totalCartCost.toFixed(2)}${
+        COLORS.RESET
+      }`
     );
   }
 }
@@ -390,36 +407,6 @@ app.addToCart(2, 1, 2); // Laptop Stand, qty 1, Express delivery
 app.viewCart();
 user1.logout();
 
-console.log(`${COLORS.CYAN}\n=== User Test: ya ===${COLORS.RESET}`);
-const user2 = new User("ya", "ya@ya.com", "yapass", "Street Y");
-user2.register("ya@ya.com", "yapass");
-user2.login("ya@ya.com", "yapass");
-app.setLoggedInUser(user2);
-const yaOrderDate = new Date("2025-06-03T20:02:00+07:00");
-app.addPayment(2, 59.98, "Credit Card", 59.98, yaOrderDate);
-app.viewProducts();
-app.initializeCart();
-app.addToCart(3, 3, 1); // USB Cable, qty 3, Standard delivery
-app.viewCart();
-user2.logout();
-
-console.log(`${COLORS.CYAN}\n=== User Test: Khoeum ===${COLORS.RESET}`);
-const user3 = new User("Khoeum", "Khoeum@Khoeum.com", "khoupass", "Street K");
-user3.register("Khoeum@Khoeum.com", "khoupass");
-user3.login("Khoeum@Khoeum.com", "wrong");
-app.setLoggedInUser(user3);
-app.viewProducts();
-user3.login("Khoeum@Khoeum.com", "khoupass");
-app.setLoggedInUser(user3);
-const khoeumOrderDate = new Date("2025-06-03T20:07:00+07:00");
-app.addPayment(3, 59.98, "Paypal", 59.98, khoeumOrderDate);
-app.viewProducts();
-app.initializeCart();
-app.addToCart(1, 1, 3); // T-Shirt, qty 1, Same-Day delivery
-app.addToCart(3, 2, 2); // USB Cable, qty 2, Express delivery
-app.viewCart();
-user3.logout();
-
 console.log(`${COLORS.CYAN}\n=== User Test: kartrork ===${COLORS.RESET}`);
 const user4 = new User(
   "kartrork",
@@ -439,18 +426,3 @@ app.addToCart(2, 1, 2); // Laptop Stand, qty 1, Express delivery
 app.addToCart(3, 1, 1); // USB Cable, qty 1, Standard delivery
 app.viewCart();
 user4.logout();
-
-// === New User Test Case for June 6, 2025 ===
-console.log(`${COLORS.CYAN}\n=== User Test: newUser ===${COLORS.RESET}`);
-const user5 = new User("newUser", "newuser@new.com", "newpass", "Street N");
-user5.register("newuser@new.com", "newpass");
-user5.login("newuser@new.com", "newpass");
-app.setLoggedInUser(user5);
-const newUserOrderDate = new Date("2025-06-06T14:16:00+07:00"); // Current date and time
-app.addPayment(5, 65.99, "Credit Card", 65.99, newUserOrderDate);
-app.viewProducts();
-app.initializeCart();
-app.addToCart(1, 3, 2); // T-Shirt, qty 3, Express delivery
-app.addToCart(3, 1, 3); // USB Cable, qty 1, Same-Day delivery
-app.viewCart();
-user5.logout();
