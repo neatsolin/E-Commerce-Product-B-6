@@ -4,6 +4,8 @@ import { ProductCategory } from "./Product/ProductCategory";
 import { Review } from "./Product/Review";
 import { Payment } from "./Payment/Payment";
 import { User } from "./Auth/User";
+import { Cart } from "./Cart/Cart"; // Already added
+import { CartItem } from "./Cart/CartItem"; // Already added
 
 // ANSI Color Codes
 const COLORS = {
@@ -16,7 +18,7 @@ const COLORS = {
   BLUE: "\x1b[34m",
   GRAY: "\x1b[90m",
   ORANGE: "\x1b[91m",
-  PURPLE: "\x1b[95m", // Bright magenta for purple
+  PURPLE: "\x1b[95m",
 };
 
 // Generate unique IDs
@@ -37,12 +39,22 @@ class Main {
     new ProductCategory(1, "Clothing"),
     new ProductCategory(2, "Electronics"),
     new ProductCategory(3, "Accessories"),
+    new ProductCategory(4, "Home & Kitchen"),
+    new ProductCategory(5, "Sports"),
+    new ProductCategory(6, "Books"),
+    new ProductCategory(7, "Beauty"),
   ];
 
   private products: Product[] = [
     new Product(1, "T-Shirt", "Clothing", 10.0, 50, 1),
     new Product(2, "Laptop Stand", "Electronics", 500.0, 30, 2),
     new Product(3, "USB Cable", "Accessories", 50.0, 100, 1),
+    new Product(5, "Yoga Mat", "Sports", 25.0, 40, 5),
+    new Product(6, "Novel Book", "Books", 15.0, 60, 6),
+    new Product(7, "Lipstick", "Beauty", 20.0, 80, 7),
+    new Product(8, "Smartphone Case", "Accessories", 15.0, 70, 1),
+    new Product(9, "Wireless Headphones", "Electronics", 200.0, 25, 2),
+    new Product(10, "Blender", "Home & Kitchen", 100.0, 15, 4),
   ];
 
   private reviews: Review[] = [
@@ -55,6 +67,7 @@ class Main {
     { orderId: number; payments: Payment[]; createdAt: Date }[]
   > = new Map();
   private currentUser: User | null = null;
+  private carts: Map<string, Cart> = new Map();
 
   setLoggedInUser(user: User): void {
     if (user.isAuthenticated()) {
@@ -239,6 +252,142 @@ class Main {
   getReviews(): Review[] {
     return this.reviews;
   }
+
+  initializeCart(): void {
+    if (this.currentUser && this.currentUser.isAuthenticated()) {
+      const username = this.currentUser.getUsername();
+      if (!this.carts.has(username)) {
+        this.carts.set(
+          username,
+          new Cart(`CART-${username}`, this.currentUser)
+        );
+        console.log(
+          `${COLORS.GREEN}🛒 Cart initialized for ${username}!${COLORS.RESET}`
+        );
+      }
+    } else {
+      console.log(
+        `${COLORS.RED}⚠️ Please log in to initialize a cart.${COLORS.RESET}`
+      );
+    }
+  }
+
+  addToCart(
+    productId: number,
+    quantity: number,
+    deliveryOptionId: number
+  ): void {
+    if (!this.currentUser || !this.currentUser.isAuthenticated()) {
+      console.log(
+        `${COLORS.RED}⚠️ Please log in to add items to cart.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    const username = this.currentUser.getUsername();
+    const cart = this.carts.get(username);
+    if (!cart) {
+      console.log(
+        `${COLORS.RED}⚠️ Cart not initialized for ${username}.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    const product = this.products.find((p) => p.id === productId);
+    const deliveryOption = this.deliveryOptions.find(
+      (d) => d.id === deliveryOptionId
+    );
+
+    if (!product) {
+      console.log(
+        `${COLORS.RED}⚠️ Product with ID ${productId} not found.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    if (!deliveryOption) {
+      console.log(
+        `${COLORS.RED}⚠️ Delivery option with ID ${deliveryOptionId} not found.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    if (product.stockQuantity < quantity) {
+      console.log(
+        `${COLORS.RED}⚠️ Insufficient stock for ${product.name}. Only ${product.stockQuantity} available.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    cart.addItem(product, quantity, deliveryOption);
+    console.log(
+      `${COLORS.GREEN}✅ Added ${quantity} ${product.name}(s) to cart with ${deliveryOption.name} delivery.${COLORS.RESET}`
+    );
+  }
+
+  viewCart(): void {
+    if (!this.currentUser || !this.currentUser.isAuthenticated()) {
+      console.log(
+        `${COLORS.RED}⚠️ Please log in to view your cart.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    const username = this.currentUser.getUsername();
+    const cart = this.carts.get(username);
+    if (!cart || cart.items.length === 0) {
+      console.log(
+        `${COLORS.YELLOW}🛒 Your cart is empty, ${username}!${COLORS.RESET}`
+      );
+      return;
+    }
+
+    console.log(`${COLORS.CYAN}\nCart for ${username}: [${COLORS.RESET}`);
+    cart.items.forEach((item: CartItem, index: number) => {
+      const price = item.product.price;
+      const totalItemPrice = price * item.quantity;
+      const deliveryCost = item.deliveryOption ? item.deliveryOption.price : 0;
+      const total = totalItemPrice + deliveryCost;
+      console.log(`${COLORS.GREEN}  CartItem {${COLORS.RESET}`);
+      console.log(
+        `    product: ${COLORS.GREEN}'${item.product.name}'${COLORS.RESET},`
+      );
+      console.log(
+        `    quantity: ${COLORS.YELLOW}${item.quantity}${COLORS.RESET},`
+      );
+      console.log(
+        `    deliveryOption: ${COLORS.GREEN}'${
+          item.deliveryOption ? item.deliveryOption.name : "None"
+        }'${COLORS.RESET},`
+      );
+      console.log(
+        `    itemTotal: ${COLORS.GREEN}$${totalItemPrice.toFixed(2)}${
+          COLORS.RESET
+        },`
+      );
+      console.log(
+        `    deliveryCost: ${COLORS.GREEN}$${deliveryCost.toFixed(2)}${
+          COLORS.RESET
+        },`
+      );
+      console.log(
+        `    total: ${COLORS.GREEN}$${total.toFixed(2)}${COLORS.RESET},`
+      );
+      console.log(`  }${index < cart.items.length - 1 ? "," : ""}`);
+    });
+    console.log("]");
+
+    const totalCartCost = cart.items.reduce((total, item) => {
+      const itemTotal = item.product.price * item.quantity;
+      const deliveryCost = item.deliveryOption ? item.deliveryOption.price : 0;
+      return total + itemTotal + deliveryCost;
+    }, 0);
+    console.log(
+      `${COLORS.MAGENTA}Total Cart Cost: $${totalCartCost.toFixed(2)}${
+        COLORS.RESET
+      }`
+    );
+  }
 }
 
 // Test Users & Main Flow
@@ -252,30 +401,11 @@ app.setLoggedInUser(user1);
 const solinOrderDate = new Date("2025-06-05T19:58:00+07:00");
 app.addPayment(1, 59.98, "Credit Card", 59.98, solinOrderDate);
 app.viewProducts();
+app.initializeCart();
+app.addToCart(1, 2, 1); // T-Shirt, qty 2, Standard delivery
+app.addToCart(2, 1, 2); // Laptop Stand, qty 1, Express delivery
+app.viewCart();
 user1.logout();
-
-console.log(`${COLORS.CYAN}\n=== User Test: ya ===${COLORS.RESET}`);
-const user2 = new User("ya", "ya@ya.com", "yapass", "Street Y");
-user2.register("ya@ya.com", "yapass");
-user2.login("ya@ya.com", "yapass");
-app.setLoggedInUser(user2);
-const yaOrderDate = new Date("2025-06-03T20:02:00+07:00");
-app.addPayment(2, 59.98, "Credit Card", 59.98, yaOrderDate);
-app.viewProducts();
-user2.logout();
-
-console.log(`${COLORS.CYAN}\n=== User Test: Khoeum ===${COLORS.RESET}`);
-const user3 = new User("Khoeum", "Khoeum@Khoeum.com", "khoupass", "Street K");
-user3.register("Khoeum@Khoeum.com", "khoupass");
-user3.login("Khoeum@Khoeum.com", "wrong");
-app.setLoggedInUser(user3);
-app.viewProducts();
-user3.login("Khoeum@Khoeum.com", "khoupass");
-app.setLoggedInUser(user3);
-const khoeumOrderDate = new Date("2025-06-03T20:07:00+07:00");
-app.addPayment(3, 59.98, "Paypal", 59.98, khoeumOrderDate);
-app.viewProducts();
-user3.logout();
 
 console.log(`${COLORS.CYAN}\n=== User Test: kartrork ===${COLORS.RESET}`);
 const user4 = new User(
@@ -291,4 +421,8 @@ app.setLoggedInUser(user4);
 const kartrorkOrderDate = new Date("2025-06-03T20:12:00+07:00");
 app.addPayment(4, 59.98, "Bank Transfer", 59.98, kartrorkOrderDate);
 app.viewProducts();
+app.initializeCart();
+app.addToCart(2, 1, 2); // Laptop Stand, qty 1, Express delivery
+app.addToCart(3, 1, 1); // USB Cable, qty 1, Standard delivery
+app.viewCart();
 user4.logout();

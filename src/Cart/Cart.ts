@@ -1,35 +1,35 @@
-import { Customer } from '../Customer/Customer';
+import { User } from '../Auth/User';
+import { Product } from '../Product/Product';
+import { DeliveryOption } from '../Product/DeliveryOption';
 import { CartItem } from './CartItem';
-
-
-
+import { OrderItem } from '../Order/OrderItem';
 
 export class Cart {
-  customer: Customer;
-  items: CartItem[];
+    cartID: string;
+    customer: User;
+    items: CartItem[];
 
-  constructor(customer: Customer) {
-    this.customer = customer;
-    this.items = [];
-  }
-
-  addItem(item: CartItem): void {
-    const existingItem = this.items.find(i => i.product.name === item.product.name);
-    if (existingItem) {
-      existingItem.quantity += item.quantity;
-    } else {
-      this.items.push(item);
+    constructor(cartID: string, customer: User) {
+        this.cartID = cartID;
+        this.customer = customer;
+        this.items = [];
     }
-  }
 
-  removeItem(productName: string): void {
-    this.items = this.items.filter(item => item.product.name !== productName);
-  }
-
-  updateItemQuantity(productName: string, quantity: number): void {
-    const item = this.items.find(i => i.product.name === productName);
-    if (item) {
-      item.quantity = quantity;
+    addItem(product: Product, quantity: number, deliveryOption: DeliveryOption): void {
+        const cartItem = new CartItem(product, quantity, deliveryOption);
+        this.items.push(cartItem);
     }
-  }
+
+    removeItem(cartItem: CartItem): void {
+        this.items = this.items.filter(item => item !== cartItem);
+    }
+
+    getItems(): OrderItem[] {
+        return this.items.map((item, index) => new OrderItem(
+            `OI-${this.cartID}-${index + 1}`,
+            item.product,
+            item.quantity,
+            // item.deliveryOption!
+        ));
+    }
 }
