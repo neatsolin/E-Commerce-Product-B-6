@@ -407,19 +407,19 @@ app.addToCart(2, 1, 2); // Laptop Stand, qty 1, Express delivery
 app.viewCart();
 user1.logout();
 
-console.log(`${COLORS.CYAN}\n=== User Test: kartrork ===${COLORS.RESET}`);
+console.log(`${COLORS.CYAN}\n=== User Admin ===${COLORS.RESET}`);
 const user4 = new User(
-  "kartrork",
-  "kartrork@kartrork.com",
-  "kartpass",
-  "Street Z"
+  "Admin",
+  "admin@gmail.com",
+  "admin123",
+  "Street B371"
 );
-user4.register("kartrork@kartrork.com", "kartpass");
-user4.login("wrong@kartrork.com", "kartpass");
-user4.login("kartrork@kartrork.com", "kartpass");
+user4.register("admin@gmail.com", "admin123");
+user4.login("wrong@kartrork.com", "admin123");
+user4.login("admin@gmail.com", "admin123");
 app.setLoggedInUser(user4);
-const kartrorkOrderDate = new Date("2025-06-03T20:12:00+07:00");
-app.addPayment(4, 59.98, "Bank Transfer", 59.98, kartrorkOrderDate);
+const adminOrderDate = new Date("2025-06-03T20:12:00+07:00");
+app.addPayment(4, 59.98, "Bank Transfer", 59.98, adminOrderDate);
 app.viewProducts();
 app.initializeCart();
 app.addToCart(2, 1, 2); // Laptop Stand, qty 1, Express delivery
