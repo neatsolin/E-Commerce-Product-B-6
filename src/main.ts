@@ -571,19 +571,19 @@ user1.login("solin@solin.com", "userpass");
 app.setLoggedInUser(user1);
 
 const solinOrderDate = new Date("2025-06-05T19:58:00+07:00");
-app.addPayment(1, 60.00, "Credit Card", 60.00, solinOrderDate); 
+app.addPayment(1, 60.00, "Credit Card", 60.00, solinOrderDate); // Matches T-Shirt + USB Cable
 app.viewProducts();
 app.viewOrderTotal("Solin"); 
 app.cancelOrderItem(1, 1); 
-app.addReview(1, 5, "Excellent product!"); 
+app.addReview(1, 5, "Excellent product!");
 user1.logout();
 
 console.log(`${COLORS.CYAN}\n=== Seller Test: Seller 1 ===${COLORS.RESET}`);
-app.viewSellerOrders(1); 
-app.addProduct(1, "Headphones", "Electronics", 99.99, 20, 5); 
+app.viewSellerOrders(1); // User Story 2
+app.addProduct(1, "Headphones", "Electronics", 99.99, 20, 5); // Add new product
 
 console.log(`${COLORS.CYAN}\n=== Delivery Manager Test ===${COLORS.RESET}`);
-app.viewShipmentDetails(1);
+app.viewShipmentDetails(1); // User Story 3
 
 // console.log(`${COLORS.CYAN}\n=== Admin Test ===${COLORS.RESET}`);
 // app.viewStockBySeller(); // User Story 4
