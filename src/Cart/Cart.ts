@@ -1,14 +1,16 @@
+import { CartItem } from "./CartItem";
+import { Product } from "../Product/Product";
+import { DeliveryOption } from "../Product/DeliveryOption";
+
 export class Cart {
-  private items: { productId: number; quantity: number }[] = [];
-  addItem(productId: number, quantity: number): void {
-    const existingItem = this.items.find((item) => item.productId === productId);
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      this.items.push({ productId, quantity });
-    }
+  private items: CartItem[] = [];
+
+  getItems(): CartItem[] {
+    return this.items;
   }
-  getItems(): { productId: number; quantity: number }[] {
-    return [...this.items];
+
+  addItem(product: Product, quantity: number, deliveryOption?: DeliveryOption): void {
+    this.items.push(new CartItem(product, quantity, deliveryOption));
   }
+  // ... other methods
 }

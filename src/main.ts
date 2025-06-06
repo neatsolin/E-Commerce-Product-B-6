@@ -1,12 +1,129 @@
 // Minimal implementations for dependent classes
-import { DeliveryOption } from "./Product/DeliveryOption";
-import { Product } from "./Product/Product";
-import { ProductCategory } from "./Product/ProductCategory";
-import { Review } from "./Product/Review";
-import { Payment } from "./Payment/Payment";
-import { User } from "./Customer/User";
-import { Order } from "./Order/Order";
-import { Cart } from "./Cart/Cart";
+class DeliveryOption {
+  constructor(public id: number, public name: string, public price: number) {}
+}
+
+class Product {
+  constructor(
+    public id: number,
+    public name: string,
+    public category: string,
+    public price: number,
+    public stockQuantity: number,
+    public sellerId: number,
+    public discount?: number
+  ) {}
+}
+
+class ProductCategory {
+  constructor(public id: number, public name: string) {}
+}
+
+class Review {
+  constructor(
+    public id: number,
+    public productId: number,
+    public userId: string,
+    public rating: number,
+    public comment?: string
+  ) {}
+}
+
+class Payment {
+  constructor(
+    public id: number,
+    public orderId: number,
+    public amount: number,
+    public method: string,
+    public totalPrice?: number
+  ) {
+    this.status = "Pending";
+    this.createdAt = new Date();
+  }
+  public status: string;
+  public createdAt: Date;
+}
+
+class User {
+  constructor(
+    public username: string,
+    public email: string,
+    private password: string,
+    private address: string
+  ) {
+    this.authenticated = false;
+  }
+  private authenticated: boolean;
+  register(email: string, password: string): void {
+    console.log(
+      `${COLORS.GREEN}✅ Registered: Username: ${this.username}, Email: ${email}${COLORS.RESET}`
+    );
+  }
+  login(email: string, password: string): boolean {
+    if (email === this.email && password === this.password) {
+      this.authenticated = true;
+      console.log(`${COLORS.GREEN}✅ Login success: ${this.username}${COLORS.RESET}`);
+      return true;
+    }
+    console.log(`${COLORS.RED}❌ Login failed.${COLORS.RESET}`);
+    return false;
+  }
+  logout(): void {
+    this.authenticated = false;
+    console.log(`${COLORS.YELLOW}👋 Logout: ${this.username}${COLORS.RESET}`);
+  }
+  isAuthenticated(): boolean {
+    return this.authenticated;
+  }
+  getId(): string {
+    return this.username;
+  }
+  getUsername(): string {
+    return this.username;
+  }
+  setAddress(address: string): void {
+    this.address = address;
+  }
+  getAddress(): string {
+    return this.address;
+  }
+}
+
+class Cart {
+  private items: { productId: number; quantity: number }[] = [];
+  addItem(productId: number, quantity: number): void {
+    const existingItem = this.items.find((item) => item.productId === productId);
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      this.items.push({ productId, quantity });
+    }
+  }
+  getItems(): { productId: number; quantity: number }[] {
+    return [...this.items];
+  }
+}
+
+class Order {
+  constructor(
+    private id: number,
+    private customerId: string,
+    private items: { productId: number; quantity: number }[],
+    private deliveryOptionId: number
+  ) {}
+  getId(): number {
+    return this.id;
+  }
+  getCustomerId(): string {
+    return this.customerId;
+  }
+  getItems(): { productId: number; quantity: number }[] {
+    return [...this.items];
+  }
+  getDeliveryOptionId(): number {
+    return this.deliveryOptionId;
+  }
+}
 
 // ANSI Color Codes
 const COLORS = {
