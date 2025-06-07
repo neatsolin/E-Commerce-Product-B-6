@@ -1,130 +1,15 @@
+
+
 // Minimal implementations for dependent classes
-class DeliveryOption {
-  constructor(public id: number, public name: string, public price: number) {}
-}
-
-class Product {
-  constructor(
-    public id: number,
-    public name: string,
-    public category: string,
-    public price: number,
-    public stockQuantity: number,
-    public sellerId: number,
-    public discount?: number
-  ) {}
-}
-
-class ProductCategory {
-  constructor(public id: number, public name: string) {}
-}
-
-class Review {
-  constructor(
-    public id: number,
-    public productId: number,
-    public userId: string,
-    public rating: number,
-    public comment?: string
-  ) {}
-}
-
-class Payment {
-  constructor(
-    public id: number,
-    public orderId: number,
-    public amount: number,
-    public method: string,
-    public totalPrice?: number
-  ) {
-    this.status = "Pending";
-    this.createdAt = new Date();
-  }
-  public status: string;
-  public createdAt: Date;
-}
-
-class User {
-  constructor(
-    public username: string,
-    public email: string,
-    private password: string,
-    private address: string
-  ) {
-    this.authenticated = false;
-  }
-  private authenticated: boolean;
-  register(email: string, password: string): void {
-    console.log(
-      `${COLORS.GREEN}✅ Registered: Username: ${this.username}, Email: ${email}${COLORS.RESET}`
-    );
-  }
-  login(email: string, password: string): boolean {
-    if (email === this.email && password === this.password) {
-      this.authenticated = true;
-      console.log(`${COLORS.GREEN}✅ Login success: ${this.username}${COLORS.RESET}`);
-      return true;
-    }
-    console.log(`${COLORS.RED}❌ Login failed.${COLORS.RESET}`);
-    return false;
-  }
-  logout(): void {
-    this.authenticated = false;
-    console.log(`${COLORS.YELLOW}👋 Logout: ${this.username}${COLORS.RESET}`);
-  }
-  isAuthenticated(): boolean {
-    return this.authenticated;
-  }
-  getId(): string {
-    return this.username;
-  }
-  getUsername(): string {
-    return this.username;
-  }
-  setAddress(address: string): void {
-    this.address = address;
-  }
-  getAddress(): string {
-    return this.address;
-  }
-}
-
-class Cart {
-  private items: { productId: number; quantity: number }[] = [];
-  addItem(productId: number, quantity: number): void {
-    const existingItem = this.items.find((item) => item.productId === productId);
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      this.items.push({ productId, quantity });
-    }
-  }
-  getItems(): { productId: number; quantity: number }[] {
-    return [...this.items];
-  }
-}
-
-class Order {
-  constructor(
-    private id: number,
-    private customerId: string,
-    private items: { productId: number; quantity: number }[],
-    private deliveryOptionId: number
-  ) {}
-  getId(): number {
-    return this.id;
-  }
-  getCustomerId(): string {
-    return this.customerId;
-  }
-  getItems(): { productId: number; quantity: number }[] {
-    return [...this.items];
-  }
-  getDeliveryOptionId(): number {
-    return this.deliveryOptionId;
-  }
-}
-
+import { DeliveryOption } from "./Product/DeliveryOption";
+import { Product } from "./Product/Product";
+import { ProductCategory } from "./Product/ProductCategory";
+import { Review } from "./Product/Review";
+import { Payment } from "./Payment/Payment";
+import { User } from "./Customer/User";
+import { Order } from "./Order/Order";
+import { Cart } from "./Cart/Cart";
+import { CartItem } from "./Cart/CartItem";
 // ANSI Color Codes
 const COLORS = {
   RESET: "\x1b[0m",
@@ -145,29 +30,23 @@ function generateId(): number {
   return ++idCounter;
 }
 
+// Minimal implementations for dependent classes
+
+
+
+
+
+
+
+
+
+
+
 class Main {
-  private deliveryOptions: DeliveryOption[] = [
-    new DeliveryOption(1, "Standard", 5.99),
-    new DeliveryOption(2, "Express", 12.99),
-    new DeliveryOption(3, "Same-Day", 19.99),
-  ];
-
-  private productCategories: ProductCategory[] = [
-    new ProductCategory(1, "Clothing"),
-    new ProductCategory(2, "Electronics"),
-    new ProductCategory(3, "Accessories"),
-  ];
-
-  private products: Product[] = [
-    new Product(1, "T-Shirt", "Clothing", 10.0, 50, 1),
-    new Product(2, "Laptop Stand", "Electronics", 500.0, 30, 2),
-    new Product(3, "USB Cable", "Accessories", 50.0, 100, 1),
-  ];
-
-  private reviews: Review[] = [
-    new Review(generateId(), 1, "initial-user-id", 4, "Great t-shirt, fits well!"),
-  ];
-
+  private deliveryOptions: DeliveryOption[] = [];
+  private productCategories: ProductCategory[] = [];
+  private products: Product[] = [];
+  private reviews: Review[] = [];
   private orders: Order[] = [];
   private userPayments: Map<
     string,
@@ -175,19 +54,48 @@ class Main {
   > = new Map();
   private carts: Map<string, Cart> = new Map();
   private currentUser: User | null = null;
+  private canceledProductIds: Set<number> = new Set(); // Track canceled product IDs
 
   constructor() {
-    // Initialize a temporary cart for seller 1 with T-Shirt and USB Cable
-    const tempCart = new Cart();
-    tempCart.addItem(1, 1); // T-Shirt
-    tempCart.addItem(3, 1); // USB Cable
-    this.carts.set("temp-seller1", tempCart);
+    // Initialize delivery options
+    this.deliveryOptions = [
+      new DeliveryOption(1, "Standard", 5),
+      new DeliveryOption(2, "Express", 6),
+      new DeliveryOption(3, "Same-Day", 6),
+    ];
 
-    // Initialize empty carts for potential users
-    this.carts.set("Solin", new Cart());
+    // Initialize product categories
+    this.productCategories = [
+      new ProductCategory(1, "Clothing"),
+      new ProductCategory(2, "Electronics"),
+      new ProductCategory(3, "Accessories"),
+    ];
+
+    // Initialize products
+    this.products = [
+      new Product(1, "T-Shirt", "Clothing", 10.0, 50, 1),
+      new Product(2, "Laptop Stand", "Electronics", 8.0, 30, 2),
+      new Product(3, "USB Cable", "Accessories", 5.0, 100, 1),
+    ];
+
+    // Initialize reviews
+    this.reviews = [
+      new Review(generateId(), 1, "initial-user-id", 4, "Great t-shirt, fits well!"),
+    ];
+
+    // Initialize Solin's cart
+    const solinCart = new Cart();
+    const tShirt = this.products.find((p) => p.id === 1)!;
+    const laptopStand = this.products.find((p) => p.id === 2)!;
+    const standardDelivery = this.deliveryOptions.find((d) => d.id === 1)!;
+    const expressDelivery = this.deliveryOptions.find((d) => d.id === 2)!;
+
+    solinCart.addItem(tShirt, 2, standardDelivery);
+
+    this.carts.set("Solin", solinCart);
   }
-
-  // User Story 1: View total order price including discounts and delivery fees
+ 
+  // view total order
   viewOrderTotal(username: string): void {
     if (!this.currentUser || !this.currentUser.isAuthenticated()) {
       console.log(
@@ -229,7 +137,8 @@ class Main {
     console.log(`}`);
   }
 
-  // User Story 2: View all orders that include seller's products
+
+// view seller order
   viewSellerOrders(sellerId: number): void {
     const sellerOrders = this.orders.filter((order) =>
       order
@@ -261,7 +170,8 @@ class Main {
     console.log("]");
   }
 
-  // User Story 3: Check delivery method and destination
+
+// view ShipmentDetails id
   viewShipmentDetails(orderId: number): void {
     const order = this.orders.find((o) => o.getId() === orderId);
     if (!order) {
@@ -295,17 +205,19 @@ class Main {
     console.log(`}`);
   }
 
-  // User Story 4: View stock quantity for each seller
+// seller view in skock
   viewStockBySeller(): void {
     const stockBySeller = new Map<number, { productName: string; quantity: number }[]>();
     this.products.forEach((product) => {
-      if (!stockBySeller.has(product.sellerId)) {
-        stockBySeller.set(product.sellerId, []);
+      if (!this.canceledProductIds.has(product.id)) {
+        if (!stockBySeller.has(product.sellerId)) {
+          stockBySeller.set(product.sellerId, []);
+        }
+        stockBySeller.get(product.sellerId)!.push({
+          productName: product.name,
+          quantity: product.stockQuantity,
+        });
       }
-      stockBySeller.get(product.sellerId)!.push({
-        productName: product.name,
-        quantity: product.stockQuantity,
-      });
     });
 
     console.log(`${COLORS.CYAN}\nStock by Seller: {${COLORS.RESET}`);
@@ -321,7 +233,7 @@ class Main {
     console.log(`}${COLORS.RESET}`);
   }
 
-  // User Story 5: Cancel one item and get refund
+  // Product cancel
   cancelOrderItem(orderId: number, productId: number): void {
     if (!this.currentUser || !this.currentUser.isAuthenticated()) {
       console.log(
@@ -349,13 +261,13 @@ class Main {
     const item = order.getItems()[itemIndex];
     const product = this.products.find((p) => p.id === productId);
     if (product) {
-      product.stockQuantity += item.quantity; // Increase stock after cancellation
+      product.stockQuantity += item.quantity;
+      this.canceledProductIds.add(productId);
     }
 
-    const refundAmount = 10.00; // Fixed refund amount to $10.00
+    const refundAmount = 10.00;
     order.getItems().splice(itemIndex, 1);
 
-    // Update payment status to "refunded"
     const userPaymentData = this.userPayments.get(this.currentUser.getUsername()) || [];
     const orderData = userPaymentData.find((data) => data.orderId === orderId);
     if (orderData) {
@@ -364,7 +276,6 @@ class Main {
       });
     }
 
-    // Show canceled item details
     console.log(`${COLORS.CYAN}Canceled Item Details: {${COLORS.RESET}`);
     console.log(`  Product ID: ${COLORS.GREEN}${productId}${COLORS.RESET},`);
     console.log(`  Name: ${COLORS.GREEN}'${product?.name || 'Unknown'}'${COLORS.RESET},`);
@@ -375,7 +286,6 @@ class Main {
       `${COLORS.GREEN}✅ Item ${productId} canceled. Status: canceled. Refunded amount: $10.00${COLORS.RESET}`
     );
 
-    // Show updated order items
     console.log(`${COLORS.CYAN}Updated Order ${orderId} Items: [${COLORS.RESET}`);
     order.getItems().forEach((item, index) => {
       const prod = this.products.find((p) => p.id === item.productId);
@@ -385,7 +295,6 @@ class Main {
     });
     console.log("]");
 
-    // Show updated payment status
     console.log(`${COLORS.CYAN}Updated Payments for Order ${orderId}: [${COLORS.RESET}`);
     if (orderData) {
       orderData.payments.forEach((payment, index) => {
@@ -399,11 +308,10 @@ class Main {
     }
     console.log("]");
 
-    // Show updated stock
     console.log(`${COLORS.CYAN}Updated Stock for Product ${productId}: ${COLORS.GREEN}${product?.stockQuantity}${COLORS.RESET}`);
   }
 
-  // User Story 6: Review a product after delivery
+// add product new
   addReview(productId: number, rating: number, comment?: string): void {
     if (!this.currentUser || !this.currentUser.isAuthenticated()) {
       console.log(
@@ -427,7 +335,6 @@ class Main {
       `${COLORS.GREEN}✅ Review added for product ${productId} by ${this.currentUser.getUsername()}.${COLORS.RESET}`
     );
 
-    // Show updated reviews for the product
     console.log(`${COLORS.CYAN}Updated Reviews for Product ${productId}: [${COLORS.RESET}`);
     this.reviews.filter((r) => r.productId === productId).forEach((review, index) => {
       console.log(
@@ -441,8 +348,7 @@ class Main {
     });
     console.log("]");
   }
-
-  // Add a new product
+// add  new product when update
   addProduct(
     sellerId: number,
     name: string,
@@ -467,7 +373,10 @@ class Main {
       `${COLORS.GREEN}✅ Product ${name} (ID: ${productId}) added successfully by Seller ${sellerId}.${COLORS.RESET}`
     );
     console.log(`${COLORS.CYAN}Updated Products: [${COLORS.RESET}`);
-    this.products.forEach((product, index) => {
+
+    // Filter out canceled products when displaying the updated list
+    const activeProducts = this.products.filter((product) => !this.canceledProductIds.has(product.id));
+    activeProducts.forEach((product, index) => {
       console.log(`${COLORS.GREEN}  Product {${COLORS.RESET}`);
       console.log(`    id: ${COLORS.YELLOW}${product.id}${COLORS.RESET},`);
       console.log(`    name: ${COLORS.GREEN}'${product.name}'${COLORS.RESET},`);
@@ -486,11 +395,36 @@ class Main {
       console.log(
         `    sellerId: ${COLORS.YELLOW}${product.sellerId}${COLORS.RESET}`
       );
-      console.log(`  }${index < this.products.length - 1 ? "," : ""}`);
+      console.log(`  }${index < activeProducts.length - 1 ? "," : ""}`);
     });
     console.log("]");
-  }
 
+    // Add the new product to Solin's cart
+    const solinCart = this.carts.get("Solin");
+    if (solinCart) {
+      const defaultDeliveryOption = this.deliveryOptions.find((d) => d.id === 1)!; // Standard delivery
+      solinCart.addItem(newProduct, 1, defaultDeliveryOption);
+      console.log(
+        `${COLORS.GREEN}✅ Added 1 ${name}(s) to Solin's cart with Standard delivery.${COLORS.RESET}`
+      );
+
+      // Verify and display the updated cart
+      const updatedItems = solinCart.getItems();
+      const newCartItem = updatedItems.find((item) => item.product.id === newProduct.id);
+      if (newCartItem) {
+        this.viewCart("Solin");
+      } else {
+        console.log(
+          `${COLORS.RED}❌ Failed to add ${name} to Solin's cart.${COLORS.RESET}`
+        );
+      }
+    } else {
+      console.log(
+        `${COLORS.RED}❌ Solin's cart not found.${COLORS.RESET}`
+      );
+    }
+  }
+// user loged and correct password
   setLoggedInUser(user: User): void {
     if (user.isAuthenticated()) {
       this.currentUser = user;
@@ -503,20 +437,13 @@ class Main {
       if (!this.carts.has(user.getUsername())) {
         this.carts.set(user.getUsername(), new Cart());
       }
-      // Transfer items from temp-seller1 cart to Solin's cart
-      const tempCart = this.carts.get("temp-seller1");
-      if (tempCart && user.getUsername() === "Solin") {
-        const userCart = this.carts.get(user.getUsername())!;
-        tempCart.getItems().forEach((item) => userCart.addItem(item.productId, item.quantity));
-        this.carts.set(user.getUsername(), userCart);
-      }
     } else {
       console.log(
         `${COLORS.RED}❌ Login failed. Cannot set user.${COLORS.RESET}`
       );
     }
   }
-
+// add payment
   addPayment(
     orderId: number,
     amount: number,
@@ -558,15 +485,21 @@ class Main {
     }
 
     const payment = new Payment(generateId(), orderId, amount, method, totalPrice);
-    payment.createdAt = createdAt;
+
+    // payment.createdAt = createdAt;
     orderData.payments.push(payment);
 
     if (!this.orders.find((o) => o.getId() === orderId)) {
-      const newOrder = new Order(orderId, this.currentUser.getId(), items, deliveryOptionId);
+      const orderItems = items.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      }));
+      const newOrder = new Order(orderId, this.currentUser.getId(), orderItems, deliveryOptionId);
       this.orders.push(newOrder);
     }
   }
 
+// view product
   viewProducts(): void {
     if (!this.currentUser || !this.currentUser.isAuthenticated()) {
       console.log(
@@ -588,7 +521,10 @@ class Main {
     console.log("]");
 
     console.log(`${COLORS.CYAN}\nProducts: [${COLORS.RESET}`);
-    this.products.forEach((product, index) => {
+
+    // Filter out canceled products
+    const activeProducts = this.products.filter((product) => !this.canceledProductIds.has(product.id));
+    activeProducts.forEach((product, index) => {
       console.log(`${COLORS.GREEN}  Product {${COLORS.RESET}`);
       console.log(`    id: ${COLORS.YELLOW}${product.id}${COLORS.RESET},`);
       console.log(`    name: ${COLORS.GREEN}'${product.name}'${COLORS.RESET},`);
@@ -607,7 +543,7 @@ class Main {
       console.log(
         `    sellerId: ${COLORS.YELLOW}${product.sellerId}${COLORS.RESET}`
       );
-      console.log(`  }${index < this.products.length - 1 ? "," : ""}`);
+      console.log(`  }${index < activeProducts.length - 1 ? "," : ""}`);
     });
     console.log("]");
 
@@ -654,7 +590,6 @@ class Main {
             `      amount: ${COLORS.GREEN}$${payment.amount.toFixed(2)}${COLORS.RESET},\n` +
             `      method: ${COLORS.GREEN}'${payment.method}'${COLORS.RESET},\n` +
             `      status: ${COLORS.GREEN}'${payment.status}'${COLORS.RESET},\n` +
-            `      createdAt: ${COLORS.PURPLE}'${payment.createdAt.toLocaleString()}'${COLORS.RESET},\n` +
             `      totalPrice: ${COLORS.GREEN}$${payment.totalPrice?.toFixed(2) ?? "N/A"}${COLORS.RESET}\n` +
             `    },`
         );
@@ -662,6 +597,42 @@ class Main {
       console.log(`  ]`);
       console.log(`}`);
     });
+  }
+
+// view card
+  viewCart(username: string): void {
+    if (!this.currentUser || !this.currentUser.isAuthenticated()) {
+      console.log(
+        `${COLORS.RED}⚠️  Please log in to view your cart.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    const cart = this.carts.get(username);
+    if (!cart || cart.getItems().length === 0) {
+      console.log(
+        `${COLORS.YELLOW}Your cart is empty.${COLORS.RESET}`
+      );
+      return;
+    }
+
+    console.log(`${COLORS.CYAN}\nCart for ${username}: [${COLORS.RESET}`);
+    cart.getItems().forEach((item, index) => {
+      if (!this.canceledProductIds.has(item.product.id)) { 
+        console.log(`${COLORS.GREEN}  CartItem {${COLORS.RESET}`);
+        console.log(`    product: ${COLORS.GREEN}'${item.product.name}'${COLORS.RESET},`);
+        console.log(`    quantity: ${COLORS.GREEN}${item.quantity}${COLORS.RESET},`);
+        console.log(`    deliveryOption: ${COLORS.GREEN}'${item.deliveryOption.name}'${COLORS.RESET},`);
+        console.log(`    itemTotal: ${COLORS.GREEN}$${item.getItemTotal().toFixed(2)}${COLORS.RESET},`);
+        console.log(`    deliveryCost: ${COLORS.GREEN}$${item.getDeliveryCost().toFixed(2)}${COLORS.RESET},`);
+        console.log(`    total: ${COLORS.GREEN}$${item.getTotal().toFixed(2)}${COLORS.RESET}`);
+        console.log(`  }${index < cart.getItems().length - 1 ? "," : ""}`);
+      }
+    });
+    // console.log("]");
+    // console.log(
+    //   `${COLORS.CYAN}Total Cart Cost: ${COLORS.GREEN}$${cart.getTotalCartCost().toFixed(2)}${COLORS.RESET}`
+    // );
   }
 
   getDeliveryOptions(): DeliveryOption[] {
@@ -687,19 +658,24 @@ user1.login("solin@solin.com", "userpass");
 app.setLoggedInUser(user1);
 
 const solinOrderDate = new Date("2025-06-05T19:58:00+07:00");
-app.addPayment(1, 60.00, "Credit Card", 60.00, solinOrderDate); // Matches T-Shirt + USB Cable
+app.addPayment(1, 60.00, "Credit Card", 60.00, solinOrderDate);
 app.viewProducts();
-app.viewOrderTotal("Solin"); // User Story 1
-app.cancelOrderItem(1, 1); // User Story 5 with enhanced output including "canceled"
-app.addReview(1, 5, "Excellent product!"); // User Story 6 with enhanced output
+app.viewOrderTotal("Solin");
+app.cancelOrderItem(1, 1); 
+app.addReview(1, 5, "Excellent product!");
+app.viewCart("Solin");
 user1.logout();
 
 console.log(`${COLORS.CYAN}\n=== Seller Test: Seller 1 ===${COLORS.RESET}`);
-app.viewSellerOrders(1); // User Story 2
-app.addProduct(1, "Headphones", "Electronics", 99.99, 20, 5); // Add new product
+
+// Log Solin back in to view the cart after adding a product
+user1.login("solin@solin.com", "userpass");
+app.setLoggedInUser(user1);
+app.viewSellerOrders(1);
+app.addProduct(1, "Smartwatch", "Electronics", 149.99, 15, 10);
 
 console.log(`${COLORS.CYAN}\n=== Delivery Manager Test ===${COLORS.RESET}`);
-app.viewShipmentDetails(1); // User Story 3
+app.viewShipmentDetails(1);
 
 console.log(`${COLORS.CYAN}\n=== Admin Test ===${COLORS.RESET}`);
-app.viewStockBySeller(); // User Story 4
+app.viewStockBySeller();

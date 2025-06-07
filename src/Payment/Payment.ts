@@ -7,8 +7,8 @@ export class Payment {
     public totalPrice?: number
   ) {
     this.status = "Pending";
-    this.createdAt = new Date();
+    // this.createdAt = new Date();
   }
   public status: string;
-  public createdAt: Date;
+  // public createdAt: Date;
 }
