@@ -12,46 +12,39 @@ const COLORS = {
   PURPLE: "\x1b[95m",
 };
 export class User {
+  private authenticated: boolean = false;
+
   constructor(
-    public username: string,
-    public email: string,
+    private username: string,
+    private email: string,
     private password: string,
     private address: string
-  ) {
-    this.authenticated = false;
+  ) { }
+
+  register(email: string, password: string): boolean {
+    if (!this.authenticated) {
+      this.authenticated = true;
+      console.log(`${COLORS.GREEN}✅ User ${this.username} registered successfully.${COLORS.RESET}`);
+      return true;
+    }
+    return false;
   }
-  private authenticated: boolean;
-  register(email: string, password: string): void {
-    console.log(
-      `${COLORS.GREEN}✅ Registered: Username: ${this.username}, Email: ${email}${COLORS.RESET}`
-    );
-  }
+
   login(email: string, password: string): boolean {
     if (email === this.email && password === this.password) {
       this.authenticated = true;
-      console.log(`${COLORS.GREEN}✅ Login success: ${this.username}${COLORS.RESET}`);
+      console.log(`${COLORS.GREEN}✅ Login success: ${COLORS.YELLOW}${this.username}${COLORS.RESET}`);
       return true;
     }
-    console.log(`${COLORS.RED}❌ Login failed.${COLORS.RESET}`);
+    console.log(`${COLORS.RED}⚠️ Login failed for ${email}.${COLORS.RESET}`);
     return false;
   }
-  logout(): void {
-    this.authenticated = false;
-    console.log(`${COLORS.YELLOW}👋 Logout: ${this.username}${COLORS.RESET}`);
-  }
-  isAuthenticated(): boolean {
-    return this.authenticated;
-  }
-  getId(): string {
-    return this.username;
-  }
-  getUsername(): string {
-    return this.username;
-  }
-  setAddress(address: string): void {
-    this.address = address;
-  }
-  getAddress(): string {
-    return this.address;
-  }
+
+  isAuthenticated(): boolean { return this.authenticated; }
+  getUsername(): string { return this.username; }
+  getId(): string { return this.email; }
+  getAddress(): string { return this.address; }
+  setAddress(address: string): void { this.address = address; }
+  logout(): void { this.authenticated = false; console.log(`${COLORS.YELLOW}👋 Logged out ${this.username}.${COLORS.RESET}`); }
 }
+

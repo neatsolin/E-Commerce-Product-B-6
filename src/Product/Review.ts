@@ -5,5 +5,5 @@ export class Review {
     public userId: string,
     public rating: number,
     public comment?: string
-  ) {}
+  ) { }
 }

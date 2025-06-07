@@ -6,6 +6,6 @@ export class Product {
     public price: number,
     public stockQuantity: number,
     public sellerId: number,
-    public discount?: number
-  ) {}
+    public discount: number = 0
+  ) { }
 }
