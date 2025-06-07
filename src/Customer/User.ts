@@ -24,7 +24,7 @@ export class User {
   register(email: string, password: string): boolean {
     if (!this.authenticated) {
       this.authenticated = true;
-      console.log(`${COLORS.GREEN}✅ User ${this.username} registered successfully.${COLORS.RESET}`);
+      console.log(`${COLORS.GREEN}User ${this.username} registered successfully.${COLORS.RESET}`);
       return true;
     }
     return false;
@@ -33,10 +33,10 @@ export class User {
   login(email: string, password: string): boolean {
     if (email === this.email && password === this.password) {
       this.authenticated = true;
-      console.log(`${COLORS.GREEN}✅ Login success: ${COLORS.YELLOW}${this.username}${COLORS.RESET}`);
+      console.log(`${COLORS.GREEN}Login success: ${COLORS.YELLOW}${this.username}${COLORS.RESET}`);
       return true;
     }
-    console.log(`${COLORS.RED}⚠️ Login failed for ${email}.${COLORS.RESET}`);
+    console.log(`${COLORS.RED}Login failed for ${email}.${COLORS.RESET}`);
     return false;
   }
 
@@ -45,6 +45,6 @@ export class User {
   getId(): string { return this.email; }
   getAddress(): string { return this.address; }
   setAddress(address: string): void { this.address = address; }
-  logout(): void { this.authenticated = false; console.log(`${COLORS.YELLOW}👋 Logged out ${this.username}.${COLORS.RESET}`); }
+  logout(): void { this.authenticated = false; console.log(`${COLORS.YELLOW}Logged out ${this.username}.${COLORS.RESET}`); }
 }
 
