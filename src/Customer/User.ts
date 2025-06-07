@@ -1,79 +1,50 @@
-// ID generator
-export function generateId(): string {
-  const timestamp = Date.now().toString(36);
-  const randomStr = Math.random().toString(36).substring(2, 10);
-  return `${timestamp}-${randomStr}`;
-}
-
-// Interface
-export interface Authenticable {
-  login(email: string, password: string): boolean;
-  logout(): void;
-  register(email: string, password: string): boolean;
-  isAuthenticated(): boolean;
-}
-
-// Final User class
-export class User implements Authenticable {
-  userId: string;
-  private isLoggedIn: boolean;
-  
+// ANSI Color Codes
+const COLORS = {
+  RESET: "\x1b[0m",
+  GREEN: "\x1b[32m",
+  CYAN: "\x1b[36m",
+  YELLOW: "\x1b[33m",
+  MAGENTA: "\x1b[35m",
+  RED: "\x1b[31m",
+  BLUE: "\x1b[34m",
+  GRAY: "\x1b[90m",
+  ORANGE: "\x1b[91m",
+  PURPLE: "\x1b[95m",
+};
+export class User {
+  private authenticated: boolean = false;
 
   constructor(
     private username: string,
     private email: string,
     private password: string,
     private address: string
-  ) {
-    this.userId = generateId();
-    this.isLoggedIn = false;
-  }
+  ) { }
 
   register(email: string, password: string): boolean {
-    if (!email || !password) {
-      console.log(`❌ Incorrect email or password: Try again.`);
-      return false;
+    if (!this.authenticated) {
+      this.authenticated = true;
+      console.log(`${COLORS.GREEN}✅ User ${this.username} registered successfully.${COLORS.RESET}`);
+      return true;
     }
-    this.email = email;
-    this.password = password;
-    console.log(`✅ Registered: Username: ${this.username}, Email: ${this.email}`);
-    return true;
+    return false;
   }
 
   login(email: string, password: string): boolean {
-    if (!email || !password) {
-      console.log(`❌ Incorrect email or password: Try again.`);
-      return false;
-    }
-
-    if (this.email === email && this.password === password) {
-      this.isLoggedIn = true;
-      console.log(`✅ Login success: ${this.username}`);
+    if (email === this.email && password === this.password) {
+      this.authenticated = true;
+      console.log(`${COLORS.GREEN}✅ Login success: ${COLORS.YELLOW}${this.username}${COLORS.RESET}`);
       return true;
-    } else {
-      console.log(`❌ Incorrect: email or password: Try again`);
-      return false;
     }
+    console.log(`${COLORS.RED}⚠️ Login failed for ${email}.${COLORS.RESET}`);
+    return false;
   }
 
-  logout(): void {
-    this.isLoggedIn = false;
-    console.log(`👋 Logout: ${this.username}`);
-  }
-
-  isAuthenticated(): boolean {
-    return this.isLoggedIn;
-  }
-
-  getUsername(): string {
-    return this.username;
-  }
-
-  getEmail(): string {
-    return this.email;
-  }
-
-  get isLoggedInStatus(): boolean {
-    return this.isLoggedIn;
-  }
+  isAuthenticated(): boolean { return this.authenticated; }
+  getUsername(): string { return this.username; }
+  getId(): string { return this.email; }
+  getAddress(): string { return this.address; }
+  setAddress(address: string): void { this.address = address; }
+  logout(): void { this.authenticated = false; console.log(`${COLORS.YELLOW}👋 Logged out ${this.username}.${COLORS.RESET}`); }
 }
+

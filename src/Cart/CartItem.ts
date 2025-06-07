@@ -1,14 +1,22 @@
-import { Product } from '../Product/Product';
-import { DeliveryOption } from '../Product/DeliveryOption';
+import { Product } from "../Product/Product";
+import { DeliveryOption } from "../Product/DeliveryOption";
+export 
+class CartItem {
+  constructor(
+    public product: Product,
+    public quantity: number,
+    public deliveryOption: DeliveryOption
+  ) {}
 
-export class CartItem {
-    product: Product;
-    quantity: number;
-    deliveryOption: DeliveryOption | null;
+  getItemTotal(): number {
+    return this.product.price * this.quantity;
+  }
 
-    constructor(product: Product, quantity: number, deliveryOption?: DeliveryOption) {
-        this.product = product;
-        this.quantity = quantity;
-        this.deliveryOption = deliveryOption || null;
-    }
+  getDeliveryCost(): number {
+    return this.deliveryOption.price;
+  }
+
+  getTotal(): number {
+    return this.getItemTotal() + this.getDeliveryCost();
+  }
 }
